@@ -215,7 +215,8 @@
     .project-info { position: absolute; z-index: 2; right: 25px; bottom: 25px; left: 25px; }
     .project-tags { display: flex; gap: 7px; margin-bottom: 14px; }
     .project-tags span { padding: 5px 7px; border: 1px solid var(--line); color: #929b91; font: 8px var(--mono); text-transform: uppercase; }
-    .project-info h3 { margin: 0 0 7px; font: 500 28px var(--display); letter-spacing: -.045em; }
+    .project-info h3 { margin: 0 0 7px; font: 500 28px var(--display); letter-spacing: -.045em; text-shadow: 0 0 18px var(--text-glow,transparent); }
+    .project-info h3.is-glowing { text-shadow: 0 0 18px rgba(var(--accent-rgb),.4); }
     .project-info p { max-width: 420px; margin: 0; color: #909a91; font-size: 11px; line-height: 1.7; }
     .project-card.small { min-height: 291px; }
     .project-card.small .project-art { top: 7%; right: 7%; bottom: 37%; left: 7%; }
@@ -416,6 +417,11 @@
     .loader-fill { background: linear-gradient(90deg,#45dfff,#aa7aff); box-shadow: 0 0 12px #54efff; }
     @media (max-width: 720px) {
       .hero { min-height: max(790px,100svh); }
+      .hero-caption-row > div { width: 100%; min-width: 0; }
+      .hero-caption { max-width: 100%; }
+      .hero-roles { max-width: 100%; }
+      .hero-actions { max-width: 100%; flex-wrap: wrap; }
+      .hero-actions .button { min-width: 0; max-width: 100%; }
       .story-index { right: 10px; gap: 9px; }
       .story-index a { font-size: 0; }
       .cursor-ring { display: none; }
@@ -454,6 +460,32 @@
     .map-contour:nth-child(3) { animation-delay: -4s; }
     @keyframes contour-float { to { transform: translate3d(0,-8px,0) rotate(8deg) scale(1.04); } }
     .project-card.is-leaving { filter: blur(8px); }
+    .text-motion { display: contents; }
+    .word-glyph { display: inline-block; transform-origin: 50% 100%; will-change: transform,opacity,filter; }
+    html,body { max-width: 100%; overflow-x: clip; }
+    @supports not (overflow: clip) { html,body { overflow-x: hidden; } }
+    .text-target { --text-glow: rgba(var(--accent-rgb),.2); }
+    .text-target.glitch-active { animation: text-glitch .34s steps(2,end) 2; }
+    .char-glyph.wave-active { animation: glyph-wave .46s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--glyph-index,0) * 18ms); }
+    .word-glyph.wave-active { animation: glyph-wave .46s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--glyph-index,0) * 28ms); }
+    .section-title .char-glyph,.hero-title .char-glyph { text-shadow: 0 0 22px transparent; transition: text-shadow .32s,color .32s; }
+    .section-title:hover .char-glyph,.hero-title:hover .char-glyph { text-shadow: 0 0 18px var(--text-glow); }
+    .hero-title .acid { background-size: 250% auto; animation: spectral 5s linear infinite,neon-breathe 3.7s ease-in-out infinite alternate; }
+    .eyebrow .word-glyph,.scene-kicker .word-glyph { color: var(--accent); }
+    .text-scramble { color: var(--accent); text-shadow: 0 0 14px var(--text-glow); }
+    .text-underline { position: relative; display: inline-block; }
+    .text-underline::after { position: absolute; right: 0; bottom: -.08em; left: 0; height: 1px; background: linear-gradient(90deg,var(--accent),var(--accent-secondary)); box-shadow: 0 0 10px var(--text-glow); content: ""; transform: scaleX(0); transform-origin: left; }
+    .text-underline.is-drawn::after { animation: draw-underline .85s cubic-bezier(.2,.75,.25,1) forwards; }
+    .sr-only-motion { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
+    @keyframes glyph-wave { 0% { transform: translateY(0) rotateX(0) scale(1); } 42% { transform: translateY(-8px) rotateX(22deg) scale(1.08); } 100% { transform: translateY(0) rotateX(0) scale(1); } }
+    @keyframes neon-breathe { from { filter: drop-shadow(0 0 7px rgba(84,239,255,.12)); } to { filter: drop-shadow(0 0 23px rgba(84,239,255,.38)); } }
+    @keyframes draw-underline { to { transform: scaleX(1); } }
+    @keyframes text-glitch {
+      0%,100% { transform: translate(0); text-shadow: none; }
+      25% { transform: translate(-2px,1px); text-shadow: 2px 0 #ff4ca8,-2px 0 #54efff; }
+      50% { transform: translate(2px,-1px); text-shadow: -2px 0 #ff4ca8,2px 0 #54efff; }
+      75% { transform: translate(-1px); text-shadow: 1px 0 #a979ff; }
+    }
     @media (max-width: 720px) {
       .journey-track { grid-template-columns: 1fr; gap: 27px; margin-top: 48px; }
       .journey-line { top: 5px; bottom: 7px; left: 10px; width: 1px; height: auto; }
@@ -466,6 +498,7 @@
       .scene-section { will-change: auto; }
       .char-glyph { will-change: auto; }
       .journey-line-fill { width: 100%; height: 100%; }
+      .word-glyph,.char-glyph { will-change: auto; }
     }
   </style>
 </head>
@@ -674,6 +707,7 @@
       const loader = document.querySelector(".loader");
       const percent = document.getElementById("loader-percent");
       const started = performance.now();
+      document.getElementById("year").textContent = new Date().getFullYear();
       const tickLoader = (now) => {
         const progress = Math.min(100, Math.round(((now - started) / 2050) * 100));
         percent.textContent = `${String(progress).padStart(2, "0")}%`;
@@ -688,34 +722,133 @@
       };
       document.querySelectorAll(".hero-title .line-inner").forEach((node) => node.style.animationPlayState = "paused");
       requestAnimationFrame(tickLoader);
-      document.getElementById("year").textContent = new Date().getFullYear();
 
-      const animatedHeadings = document.querySelectorAll(".hero-title,.section-title,.project-info h3,.about-copy .lead,.journey-step h3,.contact-title");
-      animatedHeadings.forEach((heading) => {
-        if (heading.dataset.splitText === "true") return;
-        const label = heading.classList.contains("hero-title")
+      const headingSelector = "h1,h2,h3,h4,h5,h6";
+      const textSelector = [
+        headingSelector, "p", ".eyebrow", ".hero-kicker", ".hero-caption",
+        ".hero-roles span", ".nav-links a", ".brand > span:last-child", ".hero-index",
+        ".brand-mark", ".footer-brand", ".marquee-track span", ".loader-brand > strong",
+        ".scroll-cue span", ".core-label", ".core-readout", ".visual-label",
+        ".project-tags span", ".project-top > span:first-child", ".module-head > span",
+        ".module-head b", ".module-tags span", ".skill-name", ".skill-value", ".skill-note",
+        ".meta-cell small", ".meta-cell strong", ".journey-step small", ".loader-line",
+        ".loader-brand > span", ".loader-bottom > span", ".terminal-foot span",
+        ".contact-footnote", ".footer-quote", ".footer-status span", ".footer-bottom > span",
+        ".button"
+      ].join(",");
+      const candidateText = [...document.querySelectorAll(textSelector)];
+      const textTargets = candidateText.filter((element) => !element.parentElement?.closest(textSelector));
+      const animatedHeadings = [...document.querySelectorAll(headingSelector)];
+      const splitTextTarget = (element) => {
+        if (element.dataset.splitText === "true") return;
+        const label = element.classList.contains("hero-title")
           ? "AYUSH SINGH KNOXXZONE"
-          : heading.textContent.replace(/\s+/g, " ").trim();
-        heading.setAttribute("aria-label", label);
-        const walker = document.createTreeWalker(heading, NodeFilter.SHOW_TEXT);
+          : element.textContent.replace(/\s+/g, " ").trim();
+        if (!label) return;
+
+        const visual = document.createElement("span");
+        visual.className = "text-motion";
+        while (element.firstChild) visual.appendChild(element.firstChild);
+        element.appendChild(visual);
+        const accessible = document.createElement("span");
+        accessible.className = "sr-only-motion";
+        accessible.textContent = label;
+        element.appendChild(accessible);
+
+        const isCharacterText = element.matches(headingSelector) || element.matches(".terminal-body p,.loader-line");
+        visual.querySelectorAll("a,button").forEach((interactive) => {
+          if (!interactive.hasAttribute("aria-label")) interactive.setAttribute("aria-label", interactive.textContent.replace(/\s+/g, " ").trim());
+        });
+        const walker = document.createTreeWalker(visual, NodeFilter.SHOW_TEXT);
         const textNodes = [];
         while (walker.nextNode()) textNodes.push(walker.currentNode);
+        let glyphIndex = 0;
         textNodes.forEach((textNode) => {
           const fragment = document.createDocumentFragment();
-          Array.from(textNode.nodeValue).forEach((character) => {
-            if (/\s/.test(character)) {
-              fragment.appendChild(document.createTextNode(character));
+          const source = textNode.nodeValue || "";
+          const tokens = isCharacterText ? Array.from(source) : source.split(/(\s+)/);
+          tokens.forEach((token) => {
+            if (!token) return;
+            if (/^\s+$/.test(token)) {
+              const whitespace = document.createElement("span");
+              whitespace.className = "text-space";
+              whitespace.setAttribute("aria-hidden", "true");
+              whitespace.textContent = token;
+              fragment.appendChild(whitespace);
               return;
             }
             const glyph = document.createElement("span");
-            glyph.className = "char-glyph";
-            glyph.setAttribute("aria-hidden", "true");
-            glyph.textContent = character;
+            glyph.className = isCharacterText ? "char-glyph" : "word-glyph";
+            glyph.style.setProperty("--glyph-index", String(glyphIndex++));
+            glyph.textContent = token;
             fragment.appendChild(glyph);
           });
           textNode.replaceWith(fragment);
         });
-        heading.dataset.splitText = "true";
+        element.classList.add("text-target");
+        element.dataset.splitText = "true";
+        element.dataset.textMode = isCharacterText ? "character" : "word";
+        if (element.matches(".section-title,.project-info h3")) element.classList.add("text-underline");
+        if (element.matches(".hero-title,.contact-title")) element.classList.add("glitch-target");
+      };
+      textTargets.forEach(splitTextTarget);
+      const splitAnimatedTargets = textTargets.filter((element) => element.dataset.splitText === "true");
+      const scrambleTargets = document.querySelectorAll(".hero-kicker,.section-head .eyebrow,.hero-index");
+      const scrambleAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&";
+      const scrambleTimers = new WeakMap();
+      const scrambleText = (element) => {
+        if (scrambleTimers.has(element)) return;
+        const words = [...element.querySelectorAll(".word-glyph")];
+        if (!words.length) return;
+        const originals = words.map((word) => word.textContent);
+        const startedAt = performance.now();
+        const duration = reduceMotion ? 0 : 620;
+        element.classList.add("text-scramble");
+        const frame = (now) => {
+          const progress = duration ? Math.min(1, (now - startedAt) / duration) : 1;
+          words.forEach((word, index) => {
+            const original = originals[index];
+            const revealCount = Math.floor(progress * (original.length + 2));
+            word.textContent = Array.from(original, (character, charIndex) => {
+              if (character === " " || charIndex < revealCount) return character;
+              return scrambleAlphabet[Math.floor(Math.random() * scrambleAlphabet.length)];
+            }).join("");
+          });
+          if (progress < 1) {
+            scrambleTimers.set(element, requestAnimationFrame(frame));
+          } else {
+            originals.forEach((original, index) => words[index].textContent = original);
+            scrambleTimers.delete(element);
+            element.classList.remove("text-scramble");
+          }
+        };
+        scrambleTimers.set(element, requestAnimationFrame(frame));
+      };
+      const scrambleObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) scrambleText(entry.target);
+        });
+      }, { threshold: .65 });
+      scrambleTargets.forEach((target) => scrambleObserver.observe(target));
+      splitAnimatedTargets.forEach((target) => {
+        const glyphs = target.querySelectorAll(".char-glyph,.word-glyph");
+        const wave = () => {
+          glyphs.forEach((glyph, index) => {
+            glyph.style.setProperty("--glyph-index", String(index % 18));
+            glyph.classList.remove("wave-active");
+          });
+          void target.offsetWidth;
+          glyphs.forEach((glyph) => glyph.classList.add("wave-active"));
+        };
+        target.addEventListener("pointerenter", wave);
+        target.addEventListener("focusin", wave);
+        target.addEventListener("animationend", (event) => {
+          if (event.target.matches(".char-glyph,.word-glyph")) event.target.classList.remove("wave-active");
+        });
+        if (target.matches(".hero-kicker,.section-head .eyebrow,.hero-index")) {
+          target.addEventListener("pointerenter", () => scrambleText(target));
+          target.addEventListener("focusin", () => scrambleText(target));
+        }
       });
 
       const nav = document.querySelector(".nav-shell");
@@ -771,11 +904,11 @@
         scenes.forEach((scene, index) => {
           scene.classList.add("scene-section");
           gsap.fromTo(scene, {
-            scale: .955,
-            y: 54,
-            rotateX: 2.5,
-            opacity: .48,
-            filter: "blur(7px)",
+            scale: .985,
+            y: 22,
+            rotateX: 1,
+            opacity: 1,
+            filter: "blur(0px)",
             transformPerspective: 1200,
             transformOrigin: "50% 50%"
           }, {
@@ -804,8 +937,8 @@
               ease: "none",
               scrollTrigger: {
                 trigger: scene,
-                start: "bottom 78%",
-                end: "bottom 22%",
+                start: "bottom top",
+                end: "bottom -35%",
                 scrub: 1,
                 invalidateOnRefresh: true
               }
@@ -818,16 +951,20 @@
           if (!glyphs.length) return;
           gsap.fromTo(glyphs, {
             autoAlpha: 0,
+            x: () => gsap.utils.random(-46, 46),
             y: () => gsap.utils.random(25, 58),
             z: () => gsap.utils.random(-85, 85),
+            scale: () => gsap.utils.random(.42, 1.45),
             rotateX: () => gsap.utils.random(-58, 58),
             rotateY: () => gsap.utils.random(-24, 24),
             filter: "blur(9px)",
             transformOrigin: "50% 100%"
           }, {
             autoAlpha: 1,
+            x: 0,
             y: 0,
             z: 0,
+            scale: 1,
             rotateX: 0,
             rotateY: 0,
             filter: "blur(0px)",
@@ -836,6 +973,122 @@
             scrollTrigger: { trigger: heading, start: "top 88%", end: "top 48%", scrub: .8 }
           });
         });
+
+        splitAnimatedTargets.forEach((target) => {
+          if (target.matches(headingSelector)) return;
+          const glyphs = target.querySelectorAll(".word-glyph,.char-glyph");
+          if (!glyphs.length) return;
+          const isTyping = target.matches(".terminal-body p,.loader-line");
+          const stagger = target.matches("p") ? .012 : isTyping ? .009 : .016;
+          if (target.closest(".nav-shell")) {
+            gsap.fromTo(glyphs, {
+              autoAlpha: 0,
+              y: 12,
+              filter: "blur(4px)"
+            }, {
+              autoAlpha: 1,
+              y: 0,
+              filter: "blur(0px)",
+              stagger: .018,
+              delay: .72,
+              duration: .72,
+              ease: "power3.out"
+            });
+            return;
+          }
+          if (target.closest(".loader")) return;
+          gsap.fromTo(glyphs, {
+            autoAlpha: 0,
+            y: () => gsap.utils.random(12, 27),
+            z: () => gsap.utils.random(-35, 25),
+            rotateX: () => gsap.utils.random(-16, 16),
+            filter: "blur(5px)"
+          }, {
+            autoAlpha: 1,
+            y: 0,
+            z: 0,
+            rotateX: 0,
+            filter: "blur(0px)",
+            stagger: { each: stagger, from: isTyping ? "start" : "random" },
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: target,
+              start: target.matches(".hero-kicker,.hero-caption,.hero-roles span,.nav-links a,.button,.loader-line,.loader-brand > span,.loader-bottom > span")
+                ? "top 98%"
+                : "top 91%",
+              end: target.matches(".hero-kicker,.hero-caption,.hero-roles span,.nav-links a,.button,.loader-line,.loader-brand > span,.loader-bottom > span")
+                ? "top 71%"
+                : "top 62%",
+              scrub: target.matches(".terminal-body p") ? .55 : .72,
+              onEnter: () => target.classList.add("is-drawn"),
+              onEnterBack: () => target.classList.add("is-drawn")
+            }
+          });
+          if (target.matches("p") || target.closest("main,footer")) {
+            gsap.to(glyphs, {
+              autoAlpha: 0,
+              y: -18,
+              z: -48,
+              rotateX: -10,
+              scale: .96,
+              filter: "blur(5px)",
+              stagger: { each: stagger * .45, from: "end" },
+              ease: "power1.in",
+              scrollTrigger: {
+                trigger: target,
+                start: "bottom top",
+                end: "bottom -35%",
+                scrub: .7
+              }
+            });
+          }
+        });
+        animatedHeadings.forEach((heading) => {
+          const glyphs = heading.querySelectorAll(".char-glyph");
+          if (!glyphs.length) return;
+          gsap.to(glyphs, {
+            autoAlpha: 0,
+            y: -22,
+            z: -80,
+            rotateX: -18,
+            rotateY: 8,
+            scale: .9,
+            filter: "blur(7px)",
+            stagger: { each: .012, from: "end" },
+            ease: "power1.in",
+            scrollTrigger: { trigger: heading, start: "bottom top", end: "bottom -35%", scrub: .75 }
+          });
+        });
+
+        document.querySelectorAll(".project-info h3").forEach((heading) => {
+          ScrollTrigger.create({
+            trigger: heading,
+            start: "top 80%",
+            end: "bottom 30%",
+            onEnter: () => heading.classList.add("is-glowing", "is-drawn"),
+            onEnterBack: () => heading.classList.add("is-glowing", "is-drawn"),
+            onLeaveBack: () => heading.classList.remove("is-glowing"),
+            onLeave: () => heading.classList.remove("is-glowing")
+          });
+        });
+        const glitchTargets = [...document.querySelectorAll(".hero-title,.section-title,.project-info h3,.contact-title")];
+        const scheduleGlitch = () => {
+          window.setTimeout(() => {
+            if (!document.hidden) {
+              const visibleTargets = glitchTargets.filter((target) => {
+                const bounds = target.getBoundingClientRect();
+                return bounds.bottom > 0 && bounds.top < window.innerHeight;
+              });
+              if (visibleTargets.length) {
+                const target = visibleTargets[Math.floor(Math.random() * visibleTargets.length)];
+                target.classList.add("glitch-active");
+                window.setTimeout(() => target.classList.remove("glitch-active"), 760);
+              }
+            }
+            scheduleGlitch();
+          }, gsap.utils.random(4200, 7600));
+        };
+        scheduleGlitch();
 
         gsap.utils.toArray(".project-card").forEach((card, index) => {
           const direction = index % 2 === 0 ? -1 : 1;
