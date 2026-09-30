@@ -766,6 +766,18 @@
       };
       textTargets.forEach(splitTextTarget);
       const splitAnimatedTargets = textTargets.filter((element) => element.dataset.splitText === "true");
+      splitAnimatedTargets.forEach((element) => {
+        if (!element.closest(".nav-shell,.loader")) element.classList.add("animate-text");
+      });
+      document.querySelectorAll("img").forEach((image) => {
+        if (!image.closest(".nav-shell,.loader")) image.classList.add("animate-image");
+      });
+      document.querySelectorAll(".about-visual,.project-art,.journey-orbit,.core-halo").forEach((visual) => {
+        visual.classList.add("animate-image");
+      });
+      document.querySelectorAll(".project-card,.skill-module,.terminal,.contact-box,.journey-step").forEach((card) => {
+        card.classList.add("animate-card");
+      });
       if (!window.gsap || !window.ScrollTrigger) {
         document.body.classList.add("motion-fallback");
         document.querySelectorAll("main > section").forEach((section) => section.classList.add("scene-section"));
@@ -775,7 +787,7 @@
             entry.target.classList.toggle("is-drawn", entry.isIntersecting);
           });
         }, { threshold: .16, rootMargin: "0px 0px -8% 0px" });
-        document.querySelectorAll(".text-target,.scene-section").forEach((target) => fallbackObserver.observe(target));
+        document.querySelectorAll(".text-target,.scene-section,.animate-image,.animate-card").forEach((target) => fallbackObserver.observe(target));
       }
       const scrambleTargets = document.querySelectorAll(".hero-kicker,.section-head .eyebrow,.hero-index");
       const scrambleAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&";
@@ -845,19 +857,26 @@
       window.addEventListener("scroll", updateScroll, { passive: true });
       updateScroll();
 
-      const revealObserver = new IntersectionObserver((entries, observer) => {
+      const terminalTimers = new WeakMap();
+      const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          entry.target.classList.add("in-view");
-          if (entry.target.classList.contains("skills-panel")) entry.target.classList.add("in");
+          entry.target.classList.toggle("in-view", entry.isIntersecting);
+          if (entry.target.classList.contains("skills-panel")) entry.target.classList.toggle("in", entry.isIntersecting);
           if (entry.target.id === "terminal-body") {
+            const previousTimers = terminalTimers.get(entry.target) || [];
+            previousTimers.forEach(window.clearTimeout);
+            const timers = [];
             entry.target.querySelectorAll("p").forEach((line, index) => {
-              window.setTimeout(() => line.classList.add("visible"), reduceMotion ? 0 : index * 420);
+              if (!entry.isIntersecting) {
+                line.classList.remove("visible");
+                return;
+              }
+              timers.push(window.setTimeout(() => line.classList.add("visible"), reduceMotion ? 0 : index * 260));
             });
+            terminalTimers.set(entry.target, timers);
           }
-          observer.unobserve(entry.target);
         });
-      }, { threshold: .14 });
+      }, { threshold: .14, rootMargin: "0px 0px -5% 0px" });
       document.querySelectorAll("[data-reveal],.skills-panel,#terminal-body").forEach((element) => revealObserver.observe(element));
 
       const worlds = {
@@ -884,77 +903,85 @@
 
       if (window.gsap && window.ScrollTrigger) {
         gsap.registerPlugin(ScrollTrigger);
+        const isMobile = window.matchMedia("(max-width: 720px), (pointer: coarse)").matches;
+        const toggleActions = "play reverse play reverse";
+        const entranceDuration = reduceMotion ? .24 : isMobile ? .48 : .82;
+        const entranceEase = reduceMotion ? "power1.out" : "power3.out";
+        const createViewportAnimation = ({ elements, from, to, start = "top 88%", end = "bottom 12%", duration = entranceDuration, stagger = 0, ease = entranceEase }) => {
+          elements.forEach((element, index) => {
+            gsap.fromTo(element, from(index), {
+              ...to(index),
+              duration,
+              delay: (reduceMotion ? 0 : element.closest(".hero") ? 2.15 : 0) + (reduceMotion ? 0 : Math.min(index % 4, 3) * .045),
+              stagger: reduceMotion ? Math.min(stagger, .004) : isMobile ? Math.min(stagger, .008) : stagger,
+              ease,
+              overwrite: "auto",
+              scrollTrigger: {
+                trigger: element,
+                start,
+                end,
+                toggleActions,
+                invalidateOnRefresh: true,
+                fastScrollEnd: true
+              }
+            });
+          });
+        };
+
         const scenes = gsap.utils.toArray("main > section");
-        scenes.forEach((scene, index) => {
+        scenes.forEach((scene) => {
           scene.classList.add("scene-section");
           gsap.fromTo(scene, {
-            scale: reduceMotion ? .995 : .985,
-            y: reduceMotion ? 5 : 22,
-            rotateX: reduceMotion ? 0 : 1,
-            opacity: reduceMotion ? .82 : 1,
-            filter: reduceMotion ? "blur(1px)" : "blur(0px)",
+            scale: reduceMotion ? .998 : isMobile ? .992 : .985,
+            y: reduceMotion ? 2 : isMobile ? 10 : 22,
+            rotateX: reduceMotion || isMobile ? 0 : 1,
+            autoAlpha: reduceMotion ? .92 : .82,
+            filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)",
             transformPerspective: 1200,
             transformOrigin: "50% 50%"
           }, {
             scale: 1,
             y: 0,
             rotateX: 0,
-            opacity: 1,
+            autoAlpha: 1,
             filter: "blur(0px)",
-            ease: "none",
-            ...(reduceMotion
-              ? {
-                  duration: .28,
-                  ease: "power1.out",
-                  scrollTrigger: {
-                    trigger: scene,
-                    start: "top 92%",
-                    toggleActions: "play none none reverse",
-                    invalidateOnRefresh: true
-                  }
-                }
-              : {
-                  scrollTrigger: {
-                    trigger: scene,
-                    start: "top 88%",
-                    end: "top 42%",
-                    scrub: 1,
-                    invalidateOnRefresh: true
-                  }
-                })
+            duration: entranceDuration,
+            ease: entranceEase,
+            overwrite: "auto",
+            scrollTrigger: {
+              trigger: scene,
+              start: "top 94%",
+              end: "bottom 8%",
+              toggleActions,
+              invalidateOnRefresh: true,
+              fastScrollEnd: true
+            }
           });
-          if (!reduceMotion && index < scenes.length - 1) {
-            gsap.to(scene, {
-              scale: .91,
-              y: -68,
-              rotateX: -3.5,
-              opacity: .26,
-              filter: "blur(9px)",
-              transformOrigin: "50% 35%",
-              ease: "none",
-              scrollTrigger: {
-                trigger: scene,
-                start: "bottom top",
-                end: "bottom -35%",
-                scrub: 1,
-                invalidateOnRefresh: true
-              }
-            });
-          }
         });
 
-        animatedHeadings.forEach((heading) => {
-          const glyphs = heading.querySelectorAll(".char-glyph");
+        const textElements = gsap.utils.toArray(".animate-text");
+        createViewportAnimation({
+          elements: textElements,
+          from: () => ({ autoAlpha: 0, y: reduceMotion ? 2 : isMobile ? 12 : 24, z: reduceMotion || isMobile ? 0 : -36, rotateX: reduceMotion || isMobile ? 0 : -10, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(5px)" }),
+          to: () => ({ autoAlpha: 1, y: 0, z: 0, rotateX: 0, filter: "blur(0px)" }),
+          start: "top 91%",
+          end: "bottom 10%",
+          stagger: .012
+        });
+
+        const headingElements = animatedHeadings.filter((heading) => heading.closest(".animate-text"));
+        headingElements.forEach((heading) => {
+          const glyphs = [...heading.querySelectorAll(".char-glyph")];
           if (!glyphs.length) return;
           gsap.fromTo(glyphs, {
             autoAlpha: 0,
-            x: () => reduceMotion ? 0 : gsap.utils.random(-46, 46),
-            y: () => reduceMotion ? 3 : gsap.utils.random(25, 58),
-            z: () => reduceMotion ? 0 : gsap.utils.random(-85, 85),
-            scale: () => reduceMotion ? .98 : gsap.utils.random(.42, 1.45),
-            rotateX: () => reduceMotion ? 0 : gsap.utils.random(-58, 58),
-            rotateY: () => reduceMotion ? 0 : gsap.utils.random(-24, 24),
-            filter: reduceMotion ? "blur(1px)" : "blur(9px)",
+            x: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-34, 34),
+            y: () => reduceMotion ? 2 : isMobile ? 13 : gsap.utils.random(20, 46),
+            z: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-58, 58),
+            scale: () => reduceMotion || isMobile ? .98 : gsap.utils.random(.66, 1.25),
+            rotateX: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-38, 38),
+            rotateY: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-18, 18),
+            filter: reduceMotion || isMobile ? "blur(0px)" : "blur(7px)",
             transformOrigin: "50% 100%"
           }, {
             autoAlpha: 1,
@@ -965,131 +992,88 @@
             rotateX: 0,
             rotateY: 0,
             filter: "blur(0px)",
-            stagger: { each: reduceMotion ? .008 : .018, from: "random" },
-            ease: "power3.out",
-            ...(reduceMotion
-              ? {
-                  duration: .3,
-                  scrollTrigger: {
-                    trigger: heading,
-                    start: "top 95%",
-                    toggleActions: "play none none reverse"
-                  }
-                }
-              : {
-                  scrollTrigger: { trigger: heading, start: "top 88%", end: "top 48%", scrub: .8 }
-                })
+            duration: entranceDuration,
+            delay: !reduceMotion && heading.closest(".hero") ? 2.15 : 0,
+            stagger: { each: reduceMotion ? .002 : isMobile ? .006 : .014, from: "random" },
+            ease: entranceEase,
+            overwrite: "auto",
+            scrollTrigger: {
+              trigger: heading,
+              start: "top 90%",
+              end: "bottom 12%",
+              toggleActions,
+              invalidateOnRefresh: true,
+              fastScrollEnd: true
+            }
           });
         });
-
-        splitAnimatedTargets.forEach((target) => {
-          if (target.matches(headingSelector)) return;
-          const glyphs = target.querySelectorAll(".word-glyph,.char-glyph");
+        const wordTargets = textElements.filter((target) => !target.matches(headingSelector));
+        wordTargets.forEach((target) => {
+          const glyphs = [...target.querySelectorAll(".word-glyph,.char-glyph")];
           if (!glyphs.length) return;
-          const isTyping = target.matches(".terminal-body p,.loader-line");
-          const stagger = reduceMotion ? .004 : target.matches("p") ? .012 : isTyping ? .009 : .016;
-          if (target.closest(".nav-shell")) {
-            gsap.fromTo(glyphs, {
-              autoAlpha: 0,
-              y: 12,
-              filter: "blur(4px)"
-            }, {
-              autoAlpha: 1,
-              y: 0,
-              filter: "blur(0px)",
-              stagger: .018,
-              delay: .72,
-              duration: .72,
-              ease: "power3.out"
-            });
-            return;
-          }
-          if (target.closest(".loader")) return;
           gsap.fromTo(glyphs, {
             autoAlpha: 0,
-            y: () => reduceMotion ? 2 : gsap.utils.random(12, 27),
-            z: () => reduceMotion ? 0 : gsap.utils.random(-35, 25),
-            rotateX: () => reduceMotion ? 0 : gsap.utils.random(-16, 16),
-            filter: reduceMotion ? "blur(.5px)" : "blur(5px)"
+            y: () => reduceMotion ? 2 : isMobile ? 10 : gsap.utils.random(12, 24),
+            z: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-24, 18),
+            rotateX: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-12, 12),
+            filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)"
           }, {
             autoAlpha: 1,
             y: 0,
             z: 0,
             rotateX: 0,
             filter: "blur(0px)",
-            stagger: { each: stagger, from: isTyping ? "start" : "random" },
-            ease: "power2.out",
-            ...(reduceMotion
-              ? {
-                  duration: .26,
-                  scrollTrigger: {
-                    trigger: target,
-                    start: "top 96%",
-                    toggleActions: "play none none reverse",
-                    onEnter: () => target.classList.add("is-drawn"),
-                    onEnterBack: () => target.classList.add("is-drawn")
-                  }
-                }
-              : {
-                  scrollTrigger: {
-                    trigger: target,
-                    start: target.matches(".hero-kicker,.hero-caption,.hero-roles span,.nav-links a,.button,.loader-line,.loader-brand > span,.loader-bottom > span")
-                      ? "top 98%"
-                      : "top 91%",
-                    end: target.matches(".hero-kicker,.hero-caption,.hero-roles span,.nav-links a,.button,.loader-line,.loader-brand > span,.loader-bottom > span")
-                      ? "top 71%"
-                      : "top 62%",
-                    scrub: target.matches(".terminal-body p") ? .55 : .72,
-                    onEnter: () => target.classList.add("is-drawn"),
-                    onEnterBack: () => target.classList.add("is-drawn")
-                  }
-                })
+            duration: entranceDuration,
+            delay: !reduceMotion && target.closest(".hero") ? 2.15 : 0,
+            stagger: { each: reduceMotion ? .002 : isMobile ? .004 : target.matches("p") ? .012 : .008, from: target.matches(".terminal-body p") ? "start" : "random" },
+            ease: entranceEase,
+            overwrite: "auto",
+            scrollTrigger: {
+              trigger: target,
+              start: "top 92%",
+              end: "bottom 10%",
+              toggleActions,
+              invalidateOnRefresh: true,
+              fastScrollEnd: true,
+              onEnter: () => target.classList.add("is-drawn"),
+              onEnterBack: () => target.classList.add("is-drawn"),
+              onLeave: () => target.classList.remove("is-drawn"),
+              onLeaveBack: () => target.classList.remove("is-drawn")
+            }
           });
-          if (!reduceMotion && (target.matches("p") || target.closest("main,footer"))) {
-            gsap.to(glyphs, {
-              autoAlpha: 0,
-              y: -18,
-              z: -48,
-              rotateX: -10,
-              scale: .96,
-              filter: "blur(5px)",
-              stagger: { each: stagger * .45, from: "end" },
-              ease: "power1.in",
-              scrollTrigger: {
-                trigger: target,
-                start: "bottom top",
-                end: "bottom -35%",
-                scrub: .7
-              }
-            });
-          }
         });
-        if (!reduceMotion) animatedHeadings.forEach((heading) => {
-          const glyphs = heading.querySelectorAll(".char-glyph");
-          if (!glyphs.length) return;
-          gsap.to(glyphs, {
-            autoAlpha: 0,
-            y: -22,
-            z: -80,
-            rotateX: -18,
-            rotateY: 8,
-            scale: .9,
-            filter: "blur(7px)",
-            stagger: { each: .012, from: "end" },
-            ease: "power1.in",
-            scrollTrigger: { trigger: heading, start: "bottom top", end: "bottom -35%", scrub: .75 }
-          });
+
+        const imageElements = gsap.utils.toArray(".animate-image");
+        createViewportAnimation({
+          elements: imageElements,
+          from: () => ({ autoAlpha: 0, y: reduceMotion ? 2 : isMobile ? 14 : 30, scale: reduceMotion || isMobile ? .98 : .91, rotateX: reduceMotion || isMobile ? 0 : 4, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(7px)" }),
+          to: () => ({ autoAlpha: 1, y: 0, scale: 1, rotateX: 0, filter: "blur(0px)" }),
+          start: "top 92%",
+          end: "bottom 8%",
+          duration: entranceDuration,
+          stagger: .02
+        });
+        const cardElements = gsap.utils.toArray(".animate-card");
+        createViewportAnimation({
+          elements: cardElements,
+          from: (index) => ({ autoAlpha: 0, x: reduceMotion || isMobile ? 0 : (index % 2 ? 30 : -30), y: reduceMotion ? 2 : isMobile ? 12 : 26, z: reduceMotion || isMobile ? 0 : -38, rotateY: reduceMotion || isMobile ? 0 : (index % 2 ? -5 : 5), scale: reduceMotion || isMobile ? .99 : .95, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(5px)" }),
+          to: () => ({ autoAlpha: 1, x: 0, y: 0, z: 0, rotateY: 0, scale: 1, filter: "blur(0px)" }),
+          start: "top 91%",
+          end: "bottom 9%",
+          duration: entranceDuration,
+          stagger: .035
         });
 
         document.querySelectorAll(".project-info h3").forEach((heading) => {
           ScrollTrigger.create({
             trigger: heading,
-            start: "top 80%",
-            end: "bottom 30%",
+            start: "top 82%",
+            end: "bottom 18%",
+            toggleActions,
             onEnter: () => heading.classList.add("is-glowing", "is-drawn"),
             onEnterBack: () => heading.classList.add("is-glowing", "is-drawn"),
-            onLeaveBack: () => heading.classList.remove("is-glowing"),
-            onLeave: () => heading.classList.remove("is-glowing")
+            onLeaveBack: () => heading.classList.remove("is-glowing", "is-drawn"),
+            onLeave: () => heading.classList.remove("is-glowing", "is-drawn")
           });
         });
         const glitchTargets = [...document.querySelectorAll(".hero-title,.section-title,.project-info h3,.contact-title")];
@@ -1111,92 +1095,6 @@
         };
         if (!reduceMotion) scheduleGlitch();
 
-        gsap.utils.toArray(".project-card").forEach((card, index) => {
-          const direction = index % 2 === 0 ? -1 : 1;
-          if (reduceMotion) {
-            gsap.fromTo(card, {
-              autoAlpha: .72,
-              y: 8,
-              scale: .99,
-              filter: "blur(1px)"
-            }, {
-              autoAlpha: 1,
-              y: 0,
-              scale: 1,
-              filter: "blur(0px)",
-              duration: .28,
-              ease: "power1.out",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 96%",
-                toggleActions: "play none none reverse"
-              }
-            });
-            return;
-          }
-          const travel = gsap.timeline({
-            scrollTrigger: {
-              trigger: card,
-              start: "top 91%",
-              end: "bottom 13%",
-              scrub: .9,
-              invalidateOnRefresh: true
-            }
-          });
-          travel.fromTo(card, {
-            autoAlpha: .1,
-            x: direction * 88,
-            y: 58,
-            z: -120,
-            rotateY: direction * 17,
-            scale: .84,
-            filter: "blur(9px)"
-          }, {
-            autoAlpha: 1,
-            x: 0,
-            y: 0,
-            z: 0,
-            rotateY: 0,
-            scale: 1,
-            filter: "blur(0px)",
-            duration: .55,
-            ease: "power3.out"
-          }).to(card, {
-            autoAlpha: .38,
-            y: -48,
-            z: -80,
-            rotateY: -direction * 11,
-            scale: .92,
-            filter: "blur(7px)",
-            duration: .45,
-            ease: "power2.in"
-          });
-        });
-
-        gsap.utils.toArray(".skill-module").forEach((module, index) => {
-          gsap.fromTo(module, {
-            autoAlpha: reduceMotion ? .78 : .2,
-            y: reduceMotion ? 5 : 46,
-            z: reduceMotion ? 0 : -55,
-            rotateX: reduceMotion ? 0 : 13,
-            scale: reduceMotion ? .99 : .91,
-            filter: reduceMotion ? "blur(.5px)" : "blur(6px)"
-          }, {
-            autoAlpha: 1,
-            y: 0,
-            z: 0,
-            rotateX: 0,
-            scale: 1,
-            filter: "blur(0px)",
-            duration: reduceMotion ? .26 : .9,
-            delay: (index % 3) * .08,
-            ease: "power3.out",
-            scrollTrigger: reduceMotion
-              ? { trigger: module, start: "top 96%", toggleActions: "play none none reverse" }
-              : { trigger: module, start: "top 92%", end: "top 58%", scrub: .7 }
-          });
-        });
-
         if (reduceMotion) {
           const verticalJourney = window.matchMedia("(max-width: 720px)").matches;
           gsap.set(".journey-line-fill", verticalJourney ? { width: "100%", height: "0%" } : { width: "0%", height: "100%" });
@@ -1207,7 +1105,8 @@
             scrollTrigger: {
               trigger: ".journey-track",
               start: "top 90%",
-              toggleActions: "play none none reverse"
+              end: "bottom 10%",
+              toggleActions
             }
           } : {
             width: "100%",
@@ -1216,7 +1115,8 @@
             scrollTrigger: {
               trigger: ".journey-track",
               start: "top 90%",
-              toggleActions: "play none none reverse"
+              end: "bottom 10%",
+              toggleActions
             }
           });
         } else {
@@ -1248,10 +1148,9 @@
         const parallaxLayers = [
           [".hero-grid", -18],
           ["#universe", -12],
-          [".about-visual", -16],
           [".journey-orbit", 23]
         ];
-        (reduceMotion ? [] : parallaxLayers).forEach(([selector, distance]) => {
+        (reduceMotion || isMobile ? [] : parallaxLayers).forEach(([selector, distance]) => {
           gsap.utils.toArray(selector).forEach((layer) => {
             gsap.to(layer, {
               y: distance,
@@ -1265,19 +1164,11 @@
             });
           });
         });
-        if (!reduceMotion) gsap.to(".hero-visual", {
+        if (!reduceMotion && !isMobile) gsap.to(".hero-visual", {
           y: 125,
           opacity: .2,
           ease: "none",
           scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 }
-        });
-        if (!reduceMotion) gsap.utils.toArray(".project-art").forEach((art, index) => {
-          gsap.fromTo(art, { y: 34, rotateX: 5 }, {
-            y: -24,
-            rotateX: 0,
-            ease: "none",
-            scrollTrigger: { trigger: art.closest(".project-card"), start: "top bottom", end: "bottom top", scrub: 1 + index * .12 }
-          });
         });
         if (!reduceMotion) gsap.matchMedia().add("(min-width: 1000px)", () => {
           ScrollTrigger.create({

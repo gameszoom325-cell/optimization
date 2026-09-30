@@ -77,6 +77,22 @@
   will-change: transform, filter, opacity;
 }
 
+.animate-text,
+.animate-image,
+.animate-card {
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+}
+
+.animate-image,
+.animate-card {
+  will-change: transform, opacity, filter;
+}
+
+.animate-image img {
+  backface-visibility: hidden;
+}
+
 .scene-section::after {
   position: absolute;
   z-index: 5;
@@ -101,6 +117,24 @@ body.motion-fallback .scene-section {
 }
 
 body.motion-fallback .scene-section.motion-entered {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+body.motion-fallback .animate-image,
+body.motion-fallback .animate-card {
+  opacity: .5;
+  filter: blur(2px);
+  transform: translate3d(0, 14px, 0) scale(.97);
+  transition:
+    opacity .52s var(--motion-ease),
+    filter .52s var(--motion-ease),
+    transform .52s var(--motion-ease);
+}
+
+body.motion-fallback .animate-image.motion-entered,
+body.motion-fallback .animate-card.motion-entered {
   opacity: 1;
   filter: none;
   transform: none;
@@ -145,6 +179,11 @@ body.motion-fallback .scene-section.motion-entered {
     will-change: auto;
   }
 
+  .animate-image,
+  .animate-card {
+    will-change: auto;
+  }
+
   .text-underline.is-drawn::after {
     animation-duration: .24s;
   }
@@ -157,6 +196,20 @@ body.motion-fallback .scene-section.motion-entered {
   }
 
   body.motion-fallback .scene-section.motion-entered {
+    opacity: 1;
+    transform: none;
+  }
+
+  body.motion-fallback .animate-image,
+  body.motion-fallback .animate-card {
+    opacity: .85;
+    filter: none;
+    transform: translateY(2px) scale(1);
+    transition-duration: .24s;
+  }
+
+  body.motion-fallback .animate-image.motion-entered,
+  body.motion-fallback .animate-card.motion-entered {
     opacity: 1;
     transform: none;
   }
