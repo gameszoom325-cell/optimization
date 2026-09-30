@@ -12,9 +12,11 @@
 
 - Motion should explain depth, hierarchy, and state; avoid animating every character continuously.
 - Honor `prefers-reduced-motion`. Reduced-motion mode retains brief, low-distance entrance and text reveals but disables parallax, pinning, long scrub travel, and Lenis smoothing.
-- Viewport reveals use the shared `.animate-text`, `.animate-image`, and `.animate-card` classes and a common ScrollTrigger helper. Triggers replay in both directions with `play reverse play reverse`; the reverse action provides the outro and resets the animation for the next pass.
-- Section, glyph, card, and illustration entrances use bounded viewport ranges rather than one-way observers. The fallback IntersectionObserver also removes entered state on exit so assets can reveal again when revisited.
+- Viewport reveals use the shared `.animate-text`, `.animate-image`, `.animate-visual`, `.animate-icon`, and `.animate-card` classes and a common ScrollTrigger helper. Triggers replay in both directions with `play reverse play reverse`; the reverse action provides the outro and resets the animation for the next pass.
+- Content images, icon SVGs, project art, the about illustration, AI-core halo, and journey orbit are initialized as separate visual groups. New image elements and inline SVG icons are classified and registered when inserted. Ambient HUD/grid/noise backgrounds remain static to avoid motion distraction; the Three.js core keeps its own renderer and motion.
+- Section, glyph, card, image, SVG illustration, and icon entrances use bounded viewport ranges rather than one-way observers. The fallback IntersectionObserver also removes entered state on exit so assets can reveal again when revisited.
 - Coarse-pointer/narrow layouts reduce stagger, depth rotation, blur, and parallax. Three.js renders independently of reveal tweens and keeps its own reduced-motion behavior.
+- UI illustrations use a subtle opacity/scale/blur/vertical reveal; icon glyphs use a smaller scale and travel distance. The animated AI halo preserves its existing CSS rotation, and ambient HUD/grid/noise backgrounds are intentionally not animated by the reveal system.
 - Respect browser visibility and let CSS retain the readable layout if JavaScript or WebGL is unavailable.
 - Keep real content available as a single visually-hidden accessible text alternative when decorative split glyphs are generated.
 
@@ -55,7 +57,7 @@
 - Verify stylesheet requests for all three `styles/*.css` assets return successfully after deployment.
 - In a normal-motion browser, confirm ScrollTrigger registers and attaches to the scene, heading, paragraph, project, skill, and journey elements.
 - Scroll from the first scene to the footer, then back to the top at least twice; verify text, cards, and visual assets hide/reverse on exit and replay on re-entry.
-- Confirm visual cards and illustration elements carry `.animate-card` / `.animate-image`, and reveal triggers use `play reverse play reverse`.
+- Confirm content images, SVG icons, and illustration elements carry `.animate-image`, `.animate-icon`, or `.animate-visual`, including assets inserted after startup, and reveal triggers use `play reverse play reverse`.
 - In a reduced-motion browser, verify short text/scene reveals still run and parallax/pinning/Lenis are skipped.
 - Confirm all headings and paragraphs retain their accessible text labels and no console/runtime errors appear.
 - Verify desktop, narrow mobile, and direct hash navigation after publishing the complete static asset set.

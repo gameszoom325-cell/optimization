@@ -79,18 +79,26 @@
 
 .animate-text,
 .animate-image,
+.animate-visual,
+.animate-icon,
 .animate-card {
   transform-style: preserve-3d;
   backface-visibility: hidden;
 }
 
 .animate-image,
+.animate-visual,
+.animate-icon,
 .animate-card {
   will-change: transform, opacity, filter;
 }
 
 .animate-image img {
   backface-visibility: hidden;
+}
+
+.animate-icon {
+  transform-origin: center;
 }
 
 .scene-section::after {
@@ -123,6 +131,8 @@ body.motion-fallback .scene-section.motion-entered {
 }
 
 body.motion-fallback .animate-image,
+body.motion-fallback .animate-visual,
+body.motion-fallback .animate-icon,
 body.motion-fallback .animate-card {
   opacity: .5;
   filter: blur(2px);
@@ -134,9 +144,15 @@ body.motion-fallback .animate-card {
 }
 
 body.motion-fallback .animate-image.motion-entered,
+body.motion-fallback .animate-visual.motion-entered,
+body.motion-fallback .animate-icon.motion-entered,
 body.motion-fallback .animate-card.motion-entered {
   opacity: 1;
   filter: none;
+  transform: none;
+}
+
+body.motion-fallback .animate-visual.core-halo {
   transform: none;
 }
 
@@ -180,6 +196,8 @@ body.motion-fallback .animate-card.motion-entered {
   }
 
   .animate-image,
+  .animate-visual,
+  .animate-icon,
   .animate-card {
     will-change: auto;
   }
@@ -201,6 +219,8 @@ body.motion-fallback .animate-card.motion-entered {
   }
 
   body.motion-fallback .animate-image,
+  body.motion-fallback .animate-visual,
+  body.motion-fallback .animate-icon,
   body.motion-fallback .animate-card {
     opacity: .85;
     filter: none;
@@ -209,8 +229,15 @@ body.motion-fallback .animate-card.motion-entered {
   }
 
   body.motion-fallback .animate-image.motion-entered,
+  body.motion-fallback .animate-visual.motion-entered,
+  body.motion-fallback .animate-icon.motion-entered,
   body.motion-fallback .animate-card.motion-entered {
     opacity: 1;
+    transform: none;
+  }
+
+  body.motion-fallback .animate-visual.core-halo,
+  body.motion-fallback .animate-visual.core-halo.motion-entered {
     transform: none;
   }
 }

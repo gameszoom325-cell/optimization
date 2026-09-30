@@ -769,12 +769,32 @@
       splitAnimatedTargets.forEach((element) => {
         if (!element.closest(".nav-shell,.loader")) element.classList.add("animate-text");
       });
-      document.querySelectorAll("img").forEach((image) => {
-        if (!image.closest(".nav-shell,.loader")) image.classList.add("animate-image");
-      });
-      document.querySelectorAll(".about-visual,.project-art,.journey-orbit,.core-halo").forEach((visual) => {
-        visual.classList.add("animate-image");
-      });
+      const visualAnimationSelectors = {
+        image: ".animate-image",
+        visual: ".animate-visual",
+        icon: ".animate-icon"
+      };
+      const classifyVisualAssets = (root = document) => {
+        const images = [];
+        if (root instanceof HTMLImageElement) images.push(root);
+        if (root.querySelectorAll) images.push(...root.querySelectorAll("img"));
+        images.forEach((image) => {
+          if (image.closest(".nav-shell,.loader")) return;
+          const path = image.getAttribute("src") || "";
+          image.classList.add(/(?:^|\/)icons\//i.test(path) ? "animate-icon" : "animate-image");
+        });
+        const visuals = [];
+        if (root instanceof Element && root.matches(".about-visual,.project-art,.journey-orbit,.core-halo")) visuals.push(root);
+        if (root.querySelectorAll) visuals.push(...root.querySelectorAll(".about-visual,.project-art,.journey-orbit,.core-halo"));
+        visuals.forEach((visual) => visual.classList.add("animate-visual"));
+        const svgIcons = [];
+        if (root instanceof SVGSVGElement) svgIcons.push(root);
+        if (root.querySelectorAll) svgIcons.push(...root.querySelectorAll("svg"));
+        svgIcons.forEach((icon) => {
+          if (!icon.closest(".nav-shell,.loader")) icon.classList.add("animate-icon");
+        });
+      };
+      classifyVisualAssets();
       document.querySelectorAll(".project-card,.skill-module,.terminal,.contact-box,.journey-step").forEach((card) => {
         card.classList.add("animate-card");
       });
@@ -787,7 +807,16 @@
             entry.target.classList.toggle("is-drawn", entry.isIntersecting);
           });
         }, { threshold: .16, rootMargin: "0px 0px -8% 0px" });
-        document.querySelectorAll(".text-target,.scene-section,.animate-image,.animate-card").forEach((target) => fallbackObserver.observe(target));
+        document.querySelectorAll(".text-target,.scene-section,.animate-image,.animate-visual,.animate-icon,.animate-card").forEach((target) => fallbackObserver.observe(target));
+        const visualMutations = new MutationObserver((records) => {
+          records.forEach((record) => record.addedNodes.forEach((node) => {
+            if (!(node instanceof Element)) return;
+            classifyVisualAssets(node);
+            if (node.matches(".animate-image,.animate-visual,.animate-icon")) fallbackObserver.observe(node);
+            node.querySelectorAll(".animate-image,.animate-visual,.animate-icon").forEach((target) => fallbackObserver.observe(target));
+          }));
+        });
+        visualMutations.observe(document.body, { childList: true, subtree: true });
       }
       const scrambleTargets = document.querySelectorAll(".hero-kicker,.section-head .eyebrow,.hero-index");
       const scrambleAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&";
@@ -909,8 +938,8 @@
         const entranceEase = reduceMotion ? "power1.out" : "power3.out";
         const createViewportAnimation = ({ elements, from, to, start = "top 88%", end = "bottom 12%", duration = entranceDuration, stagger = 0, ease = entranceEase }) => {
           elements.forEach((element, index) => {
-            gsap.fromTo(element, from(index), {
-              ...to(index),
+            gsap.fromTo(element, from(index, element), {
+              ...to(index, element),
               duration,
               delay: (reduceMotion ? 0 : element.closest(".hero") ? 2.15 : 0) + (reduceMotion ? 0 : Math.min(index % 4, 3) * .045),
               stagger: reduceMotion ? Math.min(stagger, .004) : isMobile ? Math.min(stagger, .008) : stagger,
@@ -1043,16 +1072,79 @@
           });
         });
 
-        const imageElements = gsap.utils.toArray(".animate-image");
-        createViewportAnimation({
-          elements: imageElements,
-          from: () => ({ autoAlpha: 0, y: reduceMotion ? 2 : isMobile ? 14 : 30, scale: reduceMotion || isMobile ? .98 : .91, rotateX: reduceMotion || isMobile ? 0 : 4, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(7px)" }),
-          to: () => ({ autoAlpha: 1, y: 0, scale: 1, rotateX: 0, filter: "blur(0px)" }),
-          start: "top 92%",
-          end: "bottom 8%",
-          duration: entranceDuration,
-          stagger: .02
+        const registeredVisuals = new WeakSet();
+        const registerVisualReveals = (root = document) => {
+          const targets = [];
+          Object.values(visualAnimationSelectors).forEach((selector) => {
+            if (root instanceof Element && root.matches(selector)) targets.push(root);
+            if (root.querySelectorAll) targets.push(...root.querySelectorAll(selector));
+          });
+          const groups = {
+            image: [],
+            visual: [],
+            icon: []
+          };
+          let registeredCount = 0;
+          targets.forEach((target) => {
+            if (registeredVisuals.has(target)) return;
+            registeredVisuals.add(target);
+            registeredCount += 1;
+            const type = target.classList.contains("animate-icon") ? "icon"
+              : target.classList.contains("animate-visual") ? "visual"
+              : "image";
+            groups[type].push(target);
+          });
+          const visualGroups = [
+            {
+              elements: groups.image,
+              from: () => ({ autoAlpha: 0, y: reduceMotion ? 2 : isMobile ? 12 : 24, scale: reduceMotion || isMobile ? .99 : .95, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(5px)" }),
+              to: () => ({ autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)" }),
+              start: "top 93%",
+              end: "bottom 7%",
+              stagger: .012
+            },
+            {
+              elements: groups.visual,
+              from: (_, element) => element.matches(".core-halo")
+                ? { autoAlpha: 0, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)" }
+                : element.matches(".journey-orbit")
+                  ? { autoAlpha: 0, scale: reduceMotion || isMobile ? .99 : .95, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)" }
+                  : { autoAlpha: 0, y: reduceMotion ? 2 : isMobile ? 12 : 22, scale: reduceMotion || isMobile ? .99 : .95, rotateX: reduceMotion || isMobile ? 0 : 2, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)" },
+              to: (_, element) => element.matches(".core-halo")
+                ? { autoAlpha: 1, filter: "blur(0px)" }
+                : element.matches(".journey-orbit")
+                  ? { autoAlpha: 1, scale: 1, filter: "blur(0px)" }
+                  : { autoAlpha: 1, y: 0, scale: 1, rotateX: 0, filter: "blur(0px)" },
+              start: "top 93%",
+              end: "bottom 7%",
+              stagger: .012
+            },
+            {
+              elements: groups.icon,
+              from: () => ({ autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 6 : 10, scale: reduceMotion || isMobile ? .98 : .78, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(3px)" }),
+              to: () => ({ autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)" }),
+              start: "top 96%",
+              end: "bottom 4%",
+              stagger: .008
+            }
+          ];
+          visualGroups.forEach((group) => {
+            if (group.elements.length) createViewportAnimation(group);
+          });
+          return registeredCount;
+        };
+        registerVisualReveals();
+        const visualMutations = new MutationObserver((records) => {
+          let addedVisual = false;
+          records.forEach((record) => record.addedNodes.forEach((node) => {
+            if (!(node instanceof Element)) return;
+            classifyVisualAssets(node);
+            const count = registerVisualReveals(node);
+            if (count) addedVisual = true;
+          }));
+          if (addedVisual) ScrollTrigger.refresh();
         });
+        visualMutations.observe(document.body, { childList: true, subtree: true });
         const cardElements = gsap.utils.toArray(".animate-card");
         createViewportAnimation({
           elements: cardElements,
