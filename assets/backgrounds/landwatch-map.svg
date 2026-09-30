@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 540" fill="none">
+  <defs>
+    <linearGradient id="mapline" x1="48" x2="860" y1="90" y2="495" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#55EFFF" stop-opacity=".1"/>
+      <stop offset=".58" stop-color="#89CFFF" stop-opacity=".3"/>
+      <stop offset="1" stop-color="#A995FF" stop-opacity=".08"/>
+    </linearGradient>
+    <radialGradient id="pin">
+      <stop stop-color="#fff"/><stop offset=".25" stop-color="#55EFFF"/>
+      <stop offset="1" stop-color="#55EFFF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="mesh" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0H0v44" stroke="#76DBFF" stroke-opacity=".1"/>
+    </pattern>
+  </defs>
+  <path fill="url(#mesh)" d="M0 0h900v540H0z"/>
+  <g stroke="url(#mapline)">
+    <path d="M90 311c39-119 172-199 305-172 78 16 112 80 188 87 67 7 146-59 214-19 51 31 16 99-40 136-59 40-124 56-179 100-71 58-146 47-221 22-98-33-178-17-229-60-30-25-47-57-38-94Z" stroke-width="2"/>
+    <path d="M147 310c36-85 137-143 241-129 77 11 122 60 198 61 62 1 121-41 171-15 44 23 15 73-27 100-56 36-115 44-167 81-60 43-122 39-194 16-81-25-146-13-187-48-24-20-42-44-35-66Z" stroke-width="1.4"/>
+    <path d="M209 307c34-56 106-94 184-84 66 9 105 38 166 35 48-2 94-23 127-8 35 16 14 47-20 66-48 26-96 33-142 59-52 30-101 25-158 9-62-17-113-12-143-36-14-11-23-26-14-41Z" stroke="#5CEBFF" stroke-opacity=".54" stroke-width="1.6"/>
+    <path d="M73 180 827 414M126 457 746 79M0 270h900M451 0v540" stroke-opacity=".12" stroke-dasharray="5 9"/>
+  </g>
+  <circle cx="533" cy="264" r="50" fill="url(#pin)" opacity=".8"/>
+  <circle cx="533" cy="264" r="5" fill="#B8FAFF"/>
+  <circle cx="533" cy="264" r="9" stroke="#55EFFF" stroke-opacity=".8"/>
+</svg>

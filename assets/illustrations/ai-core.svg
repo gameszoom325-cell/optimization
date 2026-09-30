@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" fill="none">
+  <defs>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientTransform="matrix(80 90 -92 82 263 224)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EAFDFF"/><stop offset=".23" stop-color="#65EFFF"/>
+      <stop offset=".65" stop-color="#8476FF"/><stop offset="1" stop-color="#11152C"/>
+    </radialGradient>
+    <radialGradient id="aura">
+      <stop stop-color="#55EFFF" stop-opacity=".3"/><stop offset="1" stop-color="#5A4CFF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="300" cy="300" r="230" fill="url(#aura)"/>
+  <g stroke="#73EFFF" stroke-opacity=".6">
+    <circle cx="300" cy="300" r="157"/><circle cx="300" cy="300" r="203" stroke-dasharray="3 9"/>
+    <ellipse cx="300" cy="300" rx="234" ry="94" transform="rotate(-28 300 300)"/>
+    <ellipse cx="300" cy="300" rx="234" ry="94" transform="rotate(54 300 300)" stroke="#A18BFF" stroke-opacity=".7"/>
+    <path d="M108 300h384M300 108v384" stroke-opacity=".25"/>
+  </g>
+  <circle cx="300" cy="300" r="65" fill="url(#core)"/>
+  <circle cx="145" cy="215" r="5" fill="#D3FCFF"/><circle cx="452" cy="371" r="4" fill="#A997FF"/>
+</svg>

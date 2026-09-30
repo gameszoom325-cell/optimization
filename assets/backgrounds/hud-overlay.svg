@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none">
+  <defs>
+    <linearGradient id="trace" x1="0" x2="1" y1="0" y2="1">
+      <stop stop-color="#66EDFF" stop-opacity=".34"/>
+      <stop offset=".52" stop-color="#8E84FF" stop-opacity=".1"/>
+      <stop offset="1" stop-color="#66EDFF" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="fade">
+      <stop stop-color="#06101D" stop-opacity="0"/>
+      <stop offset="1" stop-color="#06101D" stop-opacity=".84"/>
+    </radialGradient>
+  </defs>
+  <g stroke="url(#trace)" stroke-width="1">
+    <path d="M54 90h138l20 20v44M1546 90h-138l-20 20v44M54 910h138l20-20v-44m1372 64h-138l-20-20v-44"/>
+    <path d="M60 240h94m-94 10h57m1383-10h-94m94 10h-57M60 760h94m-94-10h57m1383 10h-94m94-10h-57"/>
+    <path d="M800 36v32m0 864v32M32 500h44m1416 0h44"/>
+  </g>
+  <g fill="#73EFFF" fill-opacity=".5">
+    <circle cx="214" cy="154" r="2"/><circle cx="1386" cy="154" r="2"/>
+    <circle cx="214" cy="846" r="2"/><circle cx="1386" cy="846" r="2"/>
+  </g>
+  <path fill="url(#fade)" d="M0 0h1600v1000H0z"/>
+</svg>

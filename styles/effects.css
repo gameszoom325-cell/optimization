@@ -55,6 +55,107 @@
     box-shadow var(--motion-medium) ease;
 }
 
+.noise {
+  background: url("../assets/textures/noise.svg") repeat;
+  background-size: 180px 180px;
+  mix-blend-mode: screen;
+}
+
+.noise::after {
+  position: absolute;
+  inset: 0;
+  background: url("../assets/textures/scanlines.svg") repeat;
+  background-size: 1600px 1000px;
+  content: "";
+  opacity: .24;
+}
+
+.hero-grid {
+  background-image:
+    url("../assets/backgrounds/hud-overlay.svg"),
+    url("../assets/backgrounds/universe-field.svg"),
+    linear-gradient(rgba(144, 180, 255, .065) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(144, 180, 255, .065) 1px, transparent 1px);
+  background-position: center, right 44% center, center, center;
+  background-size: cover, min(57vw, 760px) auto, 74px 74px, 74px 74px;
+  background-repeat: no-repeat, no-repeat, repeat, repeat;
+}
+
+.hero-visual::before {
+  position: absolute;
+  z-index: -1;
+  inset: 2%;
+  background: url("../assets/particles/particle-glow.svg") center / contain no-repeat;
+  content: "";
+  opacity: .7;
+  pointer-events: none;
+  animation: particle-aura 6s ease-in-out infinite alternate;
+}
+
+.core-halo {
+  background: url("../assets/illustrations/ai-core.svg") center / contain no-repeat;
+}
+
+.land-map::after {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: url("../assets/backgrounds/landwatch-map.svg") center / cover no-repeat;
+  content: "";
+  opacity: .78;
+  pointer-events: none;
+}
+
+.land-map > * {
+  z-index: 2;
+}
+
+.loader-orbit > img {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  max-width: none;
+  pointer-events: none;
+}
+
+.module-head > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.module-head img,
+.meta-cell small img,
+.action-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.module-head img {
+  opacity: .82;
+}
+
+.meta-cell small {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.meta-cell small img {
+  opacity: .8;
+}
+
+.action-icon {
+  width: 18px;
+  height: 18px;
+}
+
+@keyframes particle-aura {
+  from { opacity: .38; transform: scale(.94); }
+  to { opacity: .8; transform: scale(1.04); }
+}
+
 @media (pointer: coarse) {
   .cursor-trail {
     display: none;

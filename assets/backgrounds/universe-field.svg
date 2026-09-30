@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" fill="none">
+  <defs>
+    <radialGradient id="nebula" cx="0" cy="0" r="1" gradientTransform="matrix(730 0 0 460 1120 420)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5440CB" stop-opacity=".2"/>
+      <stop offset="1" stop-color="#10152D" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="grid" x1="0" x2="1600" y1="0" y2="1000" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#62EFFF" stop-opacity=".14"/>
+      <stop offset=".52" stop-color="#9382FF" stop-opacity=".08"/>
+      <stop offset="1" stop-color="#FF8C75" stop-opacity=".04"/>
+    </linearGradient>
+    <pattern id="lines" width="72" height="72" patternUnits="userSpaceOnUse">
+      <path d="M72 0H0v72" stroke="url(#grid)" stroke-width="1"/>
+      <circle cx="0.8" cy="0.8" r="1" fill="#A8DFFF" fill-opacity=".42"/>
+    </pattern>
+  </defs>
+  <path fill="url(#nebula)" d="M0 0h1600v1000H0z"/>
+  <path fill="url(#lines)" d="M0 0h1600v1000H0z"/>
+  <g fill="#C5EDFF">
+    <circle cx="181" cy="173" r="1.5" opacity=".55"/><circle cx="420" cy="353" r="1" opacity=".42"/>
+    <circle cx="719" cy="151" r="1.3" opacity=".48"/><circle cx="1032" cy="260" r="1" opacity=".5"/>
+    <circle cx="1394" cy="185" r="1.6" opacity=".4"/><circle cx="1280" cy="612" r="1.2" opacity=".58"/>
+    <circle cx="907" cy="731" r="1.4" opacity=".39"/><circle cx="259" cy="777" r="1" opacity=".5"/>
+  </g>
+</svg>
