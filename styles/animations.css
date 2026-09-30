@@ -1,0 +1,204 @@
+.char-glyph,
+.word-glyph {
+  display: inline-block;
+  transform-origin: 50% 100%;
+  will-change: transform, opacity, filter;
+}
+
+.text-target {
+  --text-glow: rgba(var(--accent-rgb), .2);
+}
+
+.text-target.glitch-active {
+  animation: text-glitch .34s steps(2, end) 2;
+}
+
+.char-glyph.wave-active {
+  animation: glyph-wave .46s cubic-bezier(.2, .8, .2, 1) both;
+  animation-delay: calc(var(--glyph-index, 0) * 18ms);
+}
+
+.word-glyph.wave-active {
+  animation: glyph-wave .46s cubic-bezier(.2, .8, .2, 1) both;
+  animation-delay: calc(var(--glyph-index, 0) * 28ms);
+}
+
+.section-title .char-glyph,
+.hero-title .char-glyph {
+  text-shadow: 0 0 22px transparent;
+  transition: text-shadow .32s, color .32s;
+}
+
+.section-title:hover .char-glyph,
+.hero-title:hover .char-glyph {
+  text-shadow: 0 0 18px var(--text-glow);
+}
+
+.hero-title .acid {
+  background-size: 250% auto;
+  animation: spectral 5s linear infinite, neon-breathe 3.7s ease-in-out infinite alternate;
+}
+
+.eyebrow .word-glyph,
+.scene-kicker .word-glyph {
+  color: var(--accent);
+}
+
+.text-scramble {
+  color: var(--accent);
+  text-shadow: 0 0 14px var(--text-glow);
+}
+
+.text-underline {
+  position: relative;
+  display: inline-block;
+}
+
+.text-underline::after {
+  position: absolute;
+  right: 0;
+  bottom: -.08em;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+  box-shadow: 0 0 10px var(--text-glow);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.text-underline.is-drawn::after {
+  animation: draw-underline .85s cubic-bezier(.2, .75, .25, 1) forwards;
+}
+
+.scene-section {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform, filter, opacity;
+}
+
+.scene-section::after {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: .35;
+  content: "";
+  pointer-events: none;
+}
+
+body.motion-fallback .scene-section {
+  opacity: .78;
+  filter: blur(2px);
+  transform: translateY(12px);
+  transition:
+    opacity .52s var(--motion-ease),
+    filter .52s var(--motion-ease),
+    transform .52s var(--motion-ease);
+}
+
+body.motion-fallback .scene-section.motion-entered {
+  opacity: 1;
+  filter: none;
+  transform: none;
+}
+
+@keyframes glyph-wave {
+  0% { transform: translateY(0) rotateX(0) scale(1); }
+  42% { transform: translateY(-8px) rotateX(22deg) scale(1.08); }
+  100% { transform: translateY(0) rotateX(0) scale(1); }
+}
+
+@keyframes neon-breathe {
+  from { filter: drop-shadow(0 0 7px rgba(84, 239, 255, .12)); }
+  to { filter: drop-shadow(0 0 23px rgba(84, 239, 255, .38)); }
+}
+
+@keyframes draw-underline {
+  to { transform: scaleX(1); }
+}
+
+@keyframes text-glitch {
+  0%, 100% { transform: translate(0); text-shadow: none; }
+  25% { transform: translate(-2px, 1px); text-shadow: 2px 0 #ff4ca8, -2px 0 #54efff; }
+  50% { transform: translate(2px, -1px); text-shadow: -2px 0 #ff4ca8, 2px 0 #54efff; }
+  75% { transform: translate(-1px); text-shadow: 1px 0 #a979ff; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .char-glyph,
+  .word-glyph {
+    will-change: auto;
+  }
+
+  .text-target.glitch-active,
+  .char-glyph.wave-active,
+  .word-glyph.wave-active {
+    animation-duration: .18s;
+    animation-iteration-count: 1;
+  }
+
+  .scene-section {
+    will-change: auto;
+  }
+
+  .text-underline.is-drawn::after {
+    animation-duration: .24s;
+  }
+
+  body.motion-fallback .scene-section {
+    opacity: .9;
+    filter: none;
+    transform: translateY(3px);
+    transition-duration: .24s;
+  }
+
+  body.motion-fallback .scene-section.motion-entered {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body.motion-fallback .text-target .char-glyph,
+  body.motion-fallback .text-target .word-glyph {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translate3d(0, 12px, 0);
+    transition:
+      opacity .52s var(--motion-ease),
+      filter .52s var(--motion-ease),
+      transform .52s var(--motion-ease);
+  }
+
+  body.motion-fallback .text-target.motion-entered .char-glyph,
+  body.motion-fallback .text-target.motion-entered .word-glyph {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
+    transition-delay: calc(min(var(--glyph-index, 0), 20) * 14ms);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.motion-fallback .text-target .char-glyph,
+  body.motion-fallback .text-target .word-glyph {
+    opacity: 0;
+    filter: none;
+    transform: translateY(2px);
+    transition:
+      opacity .24s ease,
+      transform .24s ease;
+  }
+
+  body.motion-fallback .text-target.motion-entered .char-glyph,
+  body.motion-fallback .text-target.motion-entered .word-glyph {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    transition-delay: calc(min(var(--glyph-index, 0), 14) * 8ms);
+  }
+}
