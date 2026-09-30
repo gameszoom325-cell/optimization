@@ -6,10 +6,11 @@
   <meta name="theme-color" content="#07090b">
   <meta name="description" content="Ayush Singh — KNOXXZONE. AI/ML student and developer building strange, useful things for the next internet.">
   <title>KNOXXZONE® — Ayush Singh / Digital lifeform</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2354efff'/%3E%3Cpath d='M17 46V18h8v11l10-11h10L32 32l14 14H35L25 35v11z' fill='%2307090b'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/brand-k.svg">
+  <link rel="preload" as="image" href="./assets/illustrations/ai-core.svg" fetchpriority="high">
+  <link rel="preload" as="script" href="./assets/vendor/three-r128.min.js">
+  <link rel="preload" as="script" href="./assets/vendor/gsap-3.12.5.min.js">
+  <link rel="preload" as="script" href="./assets/vendor/ScrollTrigger-3.12.5.min.js">
   <style>
     :root {
       color-scheme: dark;
@@ -25,9 +26,9 @@
       --accent: #54efff;
       --accent-rgb: 84, 239, 255;
       --accent-secondary: #9a70ff;
-      --mono: "DM Mono", monospace;
-      --sans: "DM Sans", sans-serif;
-      --display: "Space Grotesk", sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      --sans: Inter, "Segoe UI", Arial, sans-serif;
+      --display: "Arial", "Segoe UI", sans-serif;
       --page: min(1280px, calc(100vw - 96px));
       --ease: cubic-bezier(.2, .75, .25, 1);
     }
@@ -42,7 +43,7 @@
     .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--muted); font: 10px var(--mono); letter-spacing: .13em; text-transform: uppercase; }
     .eyebrow::before { width: 6px; height: 6px; border-radius: 50%; background: var(--acid); content: ""; box-shadow: 0 0 12px var(--acid); }
     .wrap { width: var(--page); margin-inline: auto; }
-    .noise { position: fixed; z-index: 90; inset: 0; opacity: .035; pointer-events: none; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.94' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E"); }
+    .noise { position: fixed; z-index: 90; inset: 0; opacity: .035; pointer-events: none; }
     .cursor { position: fixed; z-index: 100; top: 0; left: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--acid); pointer-events: none; mix-blend-mode: difference; transform: translate(-50%,-50%); transition: width .22s, height .22s, opacity .22s; }
     .cursor.is-hover { width: 38px; height: 38px; }
     .progress-line { position: fixed; z-index: 80; top: 0; left: 0; width: 100%; height: 2px; transform: scaleX(0); transform-origin: left; background: var(--acid); box-shadow: 0 0 14px var(--acid); }
@@ -71,7 +72,8 @@
     .nav-shell.scrolled { background: rgba(7,9,11,.82); border-color: var(--line); backdrop-filter: blur(16px); }
     .nav { display: flex; align-items: center; justify-content: space-between; width: var(--page); height: 76px; margin: auto; }
     .brand { display: inline-flex; align-items: center; gap: 11px; font: 700 15px var(--display); letter-spacing: -.04em; }
-    .brand-mark { display: grid; place-items: center; width: 29px; height: 29px; color: var(--bg); background: var(--acid); border-radius: 8px; font: 700 15px var(--display); }
+    .brand-mark { display: grid; place-items: center; width: 29px; height: 29px; color: var(--bg); background: var(--acid); border-radius: 8px; font: 700 15px var(--display); overflow: hidden; }
+    .brand-mark img { display: block; width: 100%; height: 100%; }
     .brand sup { margin-left: 1px; color: var(--muted); font: 8px var(--mono); letter-spacing: 0; }
     .nav-links { display: flex; gap: 33px; align-items: center; color: #a5ada6; font: 10px var(--mono); text-transform: uppercase; letter-spacing: .06em; }
     .nav-links a { transition: color .2s; }
@@ -320,8 +322,12 @@
     }
     @media (pointer: coarse) { .cursor { display: none; } }
     @media (prefers-reduced-motion: reduce) {
-      *,*::before,*::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
-      [data-reveal] { opacity: 1; transform: none; filter: none; }
+      html { scroll-behavior: auto !important; }
+      .status-dot,.marquee-track,.orbit-path,.loader-orbit::before,.loader-orbit::after,.scan-ring::before,.scan-ring::after,.journey-orbit::before,.journey-orbit::after,.map-contour,.cursor-blink {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+      [data-reveal] { transition-duration: .24s; }
     }
     /* Digital-universe art direction: section color is driven by the active world. */
     :root { --acid: #54efff; --cyan: #b39aff; --line: rgba(176,214,255,.15); }
@@ -427,10 +433,6 @@
       .cursor-ring { display: none; }
     }
     @media (pointer: coarse) { .cursor-ring,.story-index { display: none; } }
-    .char-glyph { display: inline-block; transform-origin: 50% 100%; will-change: transform,opacity,filter; }
-    .cursor-trail { position: fixed; z-index: 98; top: 0; left: 0; width: calc(5px - var(--trail-index) * .65px); height: calc(5px - var(--trail-index) * .65px); border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px rgba(var(--accent-rgb),.7); opacity: calc(.48 - var(--trail-index) * .075); pointer-events: none; transform: translate(-50%,-50%); }
-    .scene-section { position: relative; transform-style: preserve-3d; will-change: transform,filter,opacity; }
-    .scene-section::after { position: absolute; z-index: 5; top: 0; left: 0; width: 100%; height: 1px; background: linear-gradient(90deg,transparent,var(--accent),transparent); opacity: .35; content: ""; pointer-events: none; }
     .scene-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 27px; color: #8b98ad; font: 9px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
     .scene-kicker::before { width: 22px; height: 1px; background: var(--accent); box-shadow: 0 0 10px var(--accent); content: ""; }
     .journey { position: relative; overflow: hidden; border-block: 1px solid rgba(164,151,255,.15); background: radial-gradient(ellipse at 47% 40%,rgba(132,77,255,.13),transparent 48%),linear-gradient(115deg,#0d0c1b,#090b17 52%,#100b18); }
@@ -448,9 +450,6 @@
     .journey-orbit { position: absolute; top: -95px; right: -90px; width: 310px; height: 310px; border: 1px solid rgba(155,117,255,.12); border-radius: 50%; box-shadow: 0 0 0 32px rgba(127,103,255,.025),0 0 0 68px rgba(127,103,255,.018); pointer-events: none; }
     .journey-orbit::before,.journey-orbit::after { position: absolute; inset: 19%; border: 1px dashed rgba(99,216,255,.18); border-radius: 50%; transform: rotateX(67deg); content: ""; animation: spin 32s linear infinite; }
     .journey-orbit::after { inset: 5%; transform: rotateY(67deg) rotate(35deg); animation-duration: 45s; }
-    .project-card,.skill-module,.about-visual,.terminal,.contact-box { transform-style: preserve-3d; }
-    .project-card,.skill-module { will-change: transform; }
-    .project-card .project-info,.project-card .project-top,.project-card .project-art { transform: translateZ(18px); }
     .skill-module { position: relative; overflow: hidden; border-top: 1px solid rgba(100,226,255,0); transition: background .35s,border-color .35s,box-shadow .35s; }
     .skill-module::after { position: absolute; top: 0; left: -120%; width: 70%; height: 1px; background: linear-gradient(90deg,transparent,#72efff,transparent); content: ""; transition: left .65s var(--ease); }
     .skill-module:hover { border-top-color: rgba(100,226,255,.4); box-shadow: 0 18px 50px rgba(55,102,210,.13),inset 0 0 40px rgba(83,208,255,.035); }
@@ -461,31 +460,8 @@
     @keyframes contour-float { to { transform: translate3d(0,-8px,0) rotate(8deg) scale(1.04); } }
     .project-card.is-leaving { filter: blur(8px); }
     .text-motion { display: contents; }
-    .word-glyph { display: inline-block; transform-origin: 50% 100%; will-change: transform,opacity,filter; }
     html,body { max-width: 100%; overflow-x: clip; }
     @supports not (overflow: clip) { html,body { overflow-x: hidden; } }
-    .text-target { --text-glow: rgba(var(--accent-rgb),.2); }
-    .text-target.glitch-active { animation: text-glitch .34s steps(2,end) 2; }
-    .char-glyph.wave-active { animation: glyph-wave .46s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--glyph-index,0) * 18ms); }
-    .word-glyph.wave-active { animation: glyph-wave .46s cubic-bezier(.2,.8,.2,1) both; animation-delay: calc(var(--glyph-index,0) * 28ms); }
-    .section-title .char-glyph,.hero-title .char-glyph { text-shadow: 0 0 22px transparent; transition: text-shadow .32s,color .32s; }
-    .section-title:hover .char-glyph,.hero-title:hover .char-glyph { text-shadow: 0 0 18px var(--text-glow); }
-    .hero-title .acid { background-size: 250% auto; animation: spectral 5s linear infinite,neon-breathe 3.7s ease-in-out infinite alternate; }
-    .eyebrow .word-glyph,.scene-kicker .word-glyph { color: var(--accent); }
-    .text-scramble { color: var(--accent); text-shadow: 0 0 14px var(--text-glow); }
-    .text-underline { position: relative; display: inline-block; }
-    .text-underline::after { position: absolute; right: 0; bottom: -.08em; left: 0; height: 1px; background: linear-gradient(90deg,var(--accent),var(--accent-secondary)); box-shadow: 0 0 10px var(--text-glow); content: ""; transform: scaleX(0); transform-origin: left; }
-    .text-underline.is-drawn::after { animation: draw-underline .85s cubic-bezier(.2,.75,.25,1) forwards; }
-    .sr-only-motion { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; margin: -1px !important; overflow: hidden !important; clip: rect(0,0,0,0) !important; white-space: nowrap !important; border: 0 !important; }
-    @keyframes glyph-wave { 0% { transform: translateY(0) rotateX(0) scale(1); } 42% { transform: translateY(-8px) rotateX(22deg) scale(1.08); } 100% { transform: translateY(0) rotateX(0) scale(1); } }
-    @keyframes neon-breathe { from { filter: drop-shadow(0 0 7px rgba(84,239,255,.12)); } to { filter: drop-shadow(0 0 23px rgba(84,239,255,.38)); } }
-    @keyframes draw-underline { to { transform: scaleX(1); } }
-    @keyframes text-glitch {
-      0%,100% { transform: translate(0); text-shadow: none; }
-      25% { transform: translate(-2px,1px); text-shadow: 2px 0 #ff4ca8,-2px 0 #54efff; }
-      50% { transform: translate(2px,-1px); text-shadow: -2px 0 #ff4ca8,2px 0 #54efff; }
-      75% { transform: translate(-1px); text-shadow: 1px 0 #a979ff; }
-    }
     @media (max-width: 720px) {
       .journey-track { grid-template-columns: 1fr; gap: 27px; margin-top: 48px; }
       .journey-line { top: 5px; bottom: 7px; left: 10px; width: 1px; height: auto; }
@@ -494,13 +470,10 @@
       .journey-node { top: -3px; }
       .journey-step h3 { margin-top: 8px; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      .scene-section { will-change: auto; }
-      .char-glyph { will-change: auto; }
-      .journey-line-fill { width: 100%; height: 100%; }
-      .word-glyph,.char-glyph { will-change: auto; }
-    }
   </style>
+  <link rel="stylesheet" href="./styles/globals.css">
+  <link rel="stylesheet" href="./styles/animations.css">
+  <link rel="stylesheet" href="./styles/effects.css">
 </head>
 <body class="is-loading">
   <div class="noise" aria-hidden="true"></div>
@@ -513,7 +486,7 @@
   <div class="loader" role="status" aria-label="Initializing KNOXXZONE">
     <div class="loader-inner">
       <div class="loader-brand"><strong>KNOXXZONE®</strong><span>BOOT SEQUENCE <span class="mono">/ 01</span></span></div>
-      <div class="loader-orbit"><div class="loader-core"></div></div>
+      <div class="loader-orbit"><img src="./assets/animations/boot-orbit.svg" width="160" height="160" alt="" aria-hidden="true" fetchpriority="high"><div class="loader-core"></div></div>
       <div class="loader-lines">
         <div class="loader-line">SYSTEM BOOTING<span class="mono">...</span></div>
         <div class="loader-line">LOADING NEURAL NETWORK<span class="mono">...</span></div>
@@ -526,7 +499,7 @@
   </div>
   <header class="nav-shell">
     <nav class="nav" aria-label="Main navigation">
-      <a class="brand" href="#top" aria-label="KNOXXZONE home"><span class="brand-mark">K</span><span>KNOXXZONE<sup>®</sup></span></a>
+      <a class="brand" href="#top" aria-label="KNOXXZONE home"><span class="brand-mark"><img src="./assets/icons/brand-k.svg" width="29" height="29" alt="" aria-hidden="true"></span><span>KNOXXZONE<sup>®</sup></span></a>
       <div class="nav-status"><i class="status-dot"></i><span>Available to build</span></div>
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
       <div class="nav-links">
@@ -582,8 +555,8 @@
           <p>Right now that means building for people, experimenting with AI, and staying open to whatever the next rabbit hole turns out to be.</p>
           <div class="interest-list"><span class="chip">Artificial intelligence</span><span class="chip">Web development</span><span class="chip">Open source</span><span class="chip">Gaming technology</span><span class="chip">Creative coding</span></div>
           <div class="about-meta">
-            <div class="meta-cell"><small>Currently studying</small><strong>B.Tech CSE<br>AI &amp; Machine Learning</strong></div>
-            <div class="meta-cell"><small>Coordinates</small><strong>Chennai, India<br>13.0827° N / 80.2707° E</strong></div>
+            <div class="meta-cell"><small><img src="./assets/icons/education.svg" width="14" height="14" alt="" aria-hidden="true">Currently studying</small><strong>B.Tech CSE<br>AI &amp; Machine Learning</strong></div>
+            <div class="meta-cell"><small><img src="./assets/icons/contact.svg" width="14" height="14" alt="" aria-hidden="true">Coordinates</small><strong>Chennai, India<br>13.0827° N / 80.2707° E</strong></div>
           </div>
         </div>
       </div>
@@ -647,12 +620,12 @@
           <p class="section-aside">Languages and tools I've worked with, explored, or am actively learning. The list moves as I do.</p>
         </div>
         <div class="skills-cloud" data-reveal>
-          <div class="skill-module"><div class="module-head"><span>01 / Languages</span><b>CORE</b></div><div class="module-tags"><span>C</span><span>C++</span><span>Python</span><span>Java</span><span>JavaScript</span></div><p>Learning the language of computers, one good error message at a time.</p></div>
-          <div class="skill-module"><div class="module-head"><span>02 / Frontend</span><b>INTERFACE</b></div><div class="module-tags"><span>React</span><span>Next.js</span><span>HTML</span><span>CSS</span><span>Tailwind</span></div><p>Thoughtful interfaces with a little extra personality.</p></div>
-          <div class="skill-module"><div class="module-head"><span>03 / Backend</span><b>SYSTEMS</b></div><div class="module-tags"><span>Node.js</span><span>Express</span></div><p>Connecting the pieces behind the pixels.</p></div>
-          <div class="skill-module"><div class="module-head"><span>04 / Data</span><b>MEMORY</b></div><div class="module-tags"><span>MongoDB</span><span>MySQL</span></div><p>Giving ideas a place to live and grow.</p></div>
-          <div class="skill-module"><div class="module-head"><span>05 / Intelligence</span><b>LEARNING</b></div><div class="module-tags"><span>Machine learning</span><span>TensorFlow</span><span>Data science</span></div><p>Finding patterns, asking better questions, iterating.</p></div>
-          <div class="skill-module"><div class="module-head"><span>06 / Workshop</span><b>TOOLING</b></div><div class="module-tags"><span>VS Code</span><span>Git</span><span>GitHub</span><span>Vercel</span><span>Figma</span></div><p>The everyday kit for turning sketches into shipped things.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/coding.svg" width="16" height="16" alt="" aria-hidden="true">01 / Languages</span><b>CORE</b></div><div class="module-tags"><span>C</span><span>C++</span><span>Python</span><span>Java</span><span>JavaScript</span></div><p>Learning the language of computers, one good error message at a time.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/projects.svg" width="16" height="16" alt="" aria-hidden="true">02 / Frontend</span><b>INTERFACE</b></div><div class="module-tags"><span>React</span><span>Next.js</span><span>HTML</span><span>CSS</span><span>Tailwind</span></div><p>Thoughtful interfaces with a little extra personality.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/coding.svg" width="16" height="16" alt="" aria-hidden="true">03 / Backend</span><b>SYSTEMS</b></div><div class="module-tags"><span>Node.js</span><span>Express</span></div><p>Connecting the pieces behind the pixels.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/machine-learning.svg" width="16" height="16" alt="" aria-hidden="true">04 / Data</span><b>MEMORY</b></div><div class="module-tags"><span>MongoDB</span><span>MySQL</span></div><p>Giving ideas a place to live and grow.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/ai.svg" width="16" height="16" alt="" aria-hidden="true">05 / Intelligence</span><b>LEARNING</b></div><div class="module-tags"><span>Machine learning</span><span>TensorFlow</span><span>Data science</span></div><p>Finding patterns, asking better questions, iterating.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/gaming.svg" width="16" height="16" alt="" aria-hidden="true">06 / Workshop</span><b>TOOLING</b></div><div class="module-tags"><span>VS Code</span><span>Git</span><span>GitHub</span><span>Vercel</span><span>Figma</span></div><p>The everyday kit for turning sketches into shipped things.</p></div>
         </div>
       </div>
     </section>
@@ -677,11 +650,11 @@
         <h2 class="contact-title">Got a good<br><span>“what if?”</span></h2>
         <p class="contact-copy">Have an idea, a collaboration, or a Minecraft world in need of some imagination? Send a note to <a href="mailto:090109ayush@gmail.com" style="color:var(--acid)">090109ayush@gmail.com</a>, or find me on GitHub.</p>
         <div class="contact-actions">
-          <a class="button primary magnetic" href="https://github.com/gameszoom325-cell" target="_blank" rel="noreferrer">GitHub <span class="arrow">↗</span></a>
-          <a class="button magnetic" href="https://knoxxed1ts-website.vercel.app/" target="_blank" rel="noreferrer">Portfolio <span class="arrow">↗</span></a>
-          <a class="button magnetic" href="mailto:090109ayush@gmail.com?subject=Hello%20Ayush%20%E2%80%94%20let%E2%80%99s%20build">Email <span class="arrow">↗</span></a>
-          <a class="button magnetic" href="https://www.linkedin.com/" target="_blank" rel="noreferrer" title="LinkedIn profile link not provided">LinkedIn <span class="arrow">↗</span></a>
-          <a class="button magnetic" href="https://www.instagram.com/" target="_blank" rel="noreferrer" title="Instagram profile link not provided">Instagram <span class="arrow">↗</span></a>
+          <a class="button primary magnetic" href="https://github.com/gameszoom325-cell" target="_blank" rel="noreferrer"><img class="action-icon" src="./assets/icons/github.svg" width="18" height="18" alt="" aria-hidden="true">GitHub <span class="arrow">↗</span></a>
+          <a class="button magnetic" href="https://knoxxed1ts-website.vercel.app/" target="_blank" rel="noreferrer"><img class="action-icon" src="./assets/icons/portfolio.svg" width="18" height="18" alt="" aria-hidden="true">Portfolio <span class="arrow">↗</span></a>
+          <a class="button magnetic" href="mailto:090109ayush@gmail.com?subject=Hello%20Ayush%20%E2%80%94%20let%E2%80%99s%20build"><img class="action-icon" src="./assets/icons/email.svg" width="18" height="18" alt="" aria-hidden="true">Email <span class="arrow">↗</span></a>
+          <a class="button magnetic" href="https://www.linkedin.com/" target="_blank" rel="noreferrer" title="LinkedIn profile link not provided"><img class="action-icon" src="./assets/icons/linkedin.svg" width="18" height="18" alt="" aria-hidden="true">LinkedIn <span class="arrow">↗</span></a>
+          <a class="button magnetic" href="https://www.instagram.com/" target="_blank" rel="noreferrer" title="Instagram profile link not provided"><img class="action-icon" src="./assets/icons/instagram.svg" width="18" height="18" alt="" aria-hidden="true">Instagram <span class="arrow">↗</span></a>
         </div>
         <p class="contact-footnote">DIRECT LINE: 090109ayush@gmail.com &nbsp; / &nbsp; LINKEDIN &amp; INSTAGRAM PROFILE LINKS NOT PROVIDED.</p>
       </div>
@@ -696,10 +669,10 @@
       <div class="footer-bottom"><span>© <span id="year"></span> AYUSH SINGH / MADE WITH CURIOSITY</span><span>CHENNAI, INDIA &nbsp; · &nbsp; <a href="#top">RETURN TO ORBIT ↑</a></span></div>
     </div>
   </footer>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+  <script src="./assets/vendor/three-r128.min.js"></script>
+  <script src="./assets/vendor/gsap-3.12.5.min.js"></script>
+  <script src="./assets/vendor/ScrollTrigger-3.12.5.min.js"></script>
+  <script src="./assets/vendor/lenis-1.1.20.min.js"></script>
   <script>
     (() => {
       "use strict";
@@ -793,6 +766,17 @@
       };
       textTargets.forEach(splitTextTarget);
       const splitAnimatedTargets = textTargets.filter((element) => element.dataset.splitText === "true");
+      if (!window.gsap || !window.ScrollTrigger) {
+        document.body.classList.add("motion-fallback");
+        document.querySelectorAll("main > section").forEach((section) => section.classList.add("scene-section"));
+        const fallbackObserver = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            entry.target.classList.toggle("motion-entered", entry.isIntersecting);
+            entry.target.classList.toggle("is-drawn", entry.isIntersecting);
+          });
+        }, { threshold: .16, rootMargin: "0px 0px -8% 0px" });
+        document.querySelectorAll(".text-target,.scene-section").forEach((target) => fallbackObserver.observe(target));
+      }
       const scrambleTargets = document.querySelectorAll(".hero-kicker,.section-head .eyebrow,.hero-index");
       const scrambleAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&";
       const scrambleTimers = new WeakMap();
@@ -898,17 +882,17 @@
       }, { threshold: 0, rootMargin: "-42% 0px -48% 0px" });
       document.querySelectorAll("[data-world]").forEach((section) => worldObserver.observe(section));
 
-      if (window.gsap && window.ScrollTrigger && !reduceMotion) {
+      if (window.gsap && window.ScrollTrigger) {
         gsap.registerPlugin(ScrollTrigger);
         const scenes = gsap.utils.toArray("main > section");
         scenes.forEach((scene, index) => {
           scene.classList.add("scene-section");
           gsap.fromTo(scene, {
-            scale: .985,
-            y: 22,
-            rotateX: 1,
-            opacity: 1,
-            filter: "blur(0px)",
+            scale: reduceMotion ? .995 : .985,
+            y: reduceMotion ? 5 : 22,
+            rotateX: reduceMotion ? 0 : 1,
+            opacity: reduceMotion ? .82 : 1,
+            filter: reduceMotion ? "blur(1px)" : "blur(0px)",
             transformPerspective: 1200,
             transformOrigin: "50% 50%"
           }, {
@@ -918,15 +902,28 @@
             opacity: 1,
             filter: "blur(0px)",
             ease: "none",
-            scrollTrigger: {
-              trigger: scene,
-              start: "top 88%",
-              end: "top 42%",
-              scrub: 1,
-              invalidateOnRefresh: true
-            }
+            ...(reduceMotion
+              ? {
+                  duration: .28,
+                  ease: "power1.out",
+                  scrollTrigger: {
+                    trigger: scene,
+                    start: "top 92%",
+                    toggleActions: "play none none reverse",
+                    invalidateOnRefresh: true
+                  }
+                }
+              : {
+                  scrollTrigger: {
+                    trigger: scene,
+                    start: "top 88%",
+                    end: "top 42%",
+                    scrub: 1,
+                    invalidateOnRefresh: true
+                  }
+                })
           });
-          if (index < scenes.length - 1) {
+          if (!reduceMotion && index < scenes.length - 1) {
             gsap.to(scene, {
               scale: .91,
               y: -68,
@@ -951,13 +948,13 @@
           if (!glyphs.length) return;
           gsap.fromTo(glyphs, {
             autoAlpha: 0,
-            x: () => gsap.utils.random(-46, 46),
-            y: () => gsap.utils.random(25, 58),
-            z: () => gsap.utils.random(-85, 85),
-            scale: () => gsap.utils.random(.42, 1.45),
-            rotateX: () => gsap.utils.random(-58, 58),
-            rotateY: () => gsap.utils.random(-24, 24),
-            filter: "blur(9px)",
+            x: () => reduceMotion ? 0 : gsap.utils.random(-46, 46),
+            y: () => reduceMotion ? 3 : gsap.utils.random(25, 58),
+            z: () => reduceMotion ? 0 : gsap.utils.random(-85, 85),
+            scale: () => reduceMotion ? .98 : gsap.utils.random(.42, 1.45),
+            rotateX: () => reduceMotion ? 0 : gsap.utils.random(-58, 58),
+            rotateY: () => reduceMotion ? 0 : gsap.utils.random(-24, 24),
+            filter: reduceMotion ? "blur(1px)" : "blur(9px)",
             transformOrigin: "50% 100%"
           }, {
             autoAlpha: 1,
@@ -968,9 +965,20 @@
             rotateX: 0,
             rotateY: 0,
             filter: "blur(0px)",
-            stagger: { each: .018, from: "random" },
+            stagger: { each: reduceMotion ? .008 : .018, from: "random" },
             ease: "power3.out",
-            scrollTrigger: { trigger: heading, start: "top 88%", end: "top 48%", scrub: .8 }
+            ...(reduceMotion
+              ? {
+                  duration: .3,
+                  scrollTrigger: {
+                    trigger: heading,
+                    start: "top 95%",
+                    toggleActions: "play none none reverse"
+                  }
+                }
+              : {
+                  scrollTrigger: { trigger: heading, start: "top 88%", end: "top 48%", scrub: .8 }
+                })
           });
         });
 
@@ -979,7 +987,7 @@
           const glyphs = target.querySelectorAll(".word-glyph,.char-glyph");
           if (!glyphs.length) return;
           const isTyping = target.matches(".terminal-body p,.loader-line");
-          const stagger = target.matches("p") ? .012 : isTyping ? .009 : .016;
+          const stagger = reduceMotion ? .004 : target.matches("p") ? .012 : isTyping ? .009 : .016;
           if (target.closest(".nav-shell")) {
             gsap.fromTo(glyphs, {
               autoAlpha: 0,
@@ -999,10 +1007,10 @@
           if (target.closest(".loader")) return;
           gsap.fromTo(glyphs, {
             autoAlpha: 0,
-            y: () => gsap.utils.random(12, 27),
-            z: () => gsap.utils.random(-35, 25),
-            rotateX: () => gsap.utils.random(-16, 16),
-            filter: "blur(5px)"
+            y: () => reduceMotion ? 2 : gsap.utils.random(12, 27),
+            z: () => reduceMotion ? 0 : gsap.utils.random(-35, 25),
+            rotateX: () => reduceMotion ? 0 : gsap.utils.random(-16, 16),
+            filter: reduceMotion ? "blur(.5px)" : "blur(5px)"
           }, {
             autoAlpha: 1,
             y: 0,
@@ -1011,20 +1019,33 @@
             filter: "blur(0px)",
             stagger: { each: stagger, from: isTyping ? "start" : "random" },
             ease: "power2.out",
-            scrollTrigger: {
-              trigger: target,
-              start: target.matches(".hero-kicker,.hero-caption,.hero-roles span,.nav-links a,.button,.loader-line,.loader-brand > span,.loader-bottom > span")
-                ? "top 98%"
-                : "top 91%",
-              end: target.matches(".hero-kicker,.hero-caption,.hero-roles span,.nav-links a,.button,.loader-line,.loader-brand > span,.loader-bottom > span")
-                ? "top 71%"
-                : "top 62%",
-              scrub: target.matches(".terminal-body p") ? .55 : .72,
-              onEnter: () => target.classList.add("is-drawn"),
-              onEnterBack: () => target.classList.add("is-drawn")
-            }
+            ...(reduceMotion
+              ? {
+                  duration: .26,
+                  scrollTrigger: {
+                    trigger: target,
+                    start: "top 96%",
+                    toggleActions: "play none none reverse",
+                    onEnter: () => target.classList.add("is-drawn"),
+                    onEnterBack: () => target.classList.add("is-drawn")
+                  }
+                }
+              : {
+                  scrollTrigger: {
+                    trigger: target,
+                    start: target.matches(".hero-kicker,.hero-caption,.hero-roles span,.nav-links a,.button,.loader-line,.loader-brand > span,.loader-bottom > span")
+                      ? "top 98%"
+                      : "top 91%",
+                    end: target.matches(".hero-kicker,.hero-caption,.hero-roles span,.nav-links a,.button,.loader-line,.loader-brand > span,.loader-bottom > span")
+                      ? "top 71%"
+                      : "top 62%",
+                    scrub: target.matches(".terminal-body p") ? .55 : .72,
+                    onEnter: () => target.classList.add("is-drawn"),
+                    onEnterBack: () => target.classList.add("is-drawn")
+                  }
+                })
           });
-          if (target.matches("p") || target.closest("main,footer")) {
+          if (!reduceMotion && (target.matches("p") || target.closest("main,footer"))) {
             gsap.to(glyphs, {
               autoAlpha: 0,
               y: -18,
@@ -1043,7 +1064,7 @@
             });
           }
         });
-        animatedHeadings.forEach((heading) => {
+        if (!reduceMotion) animatedHeadings.forEach((heading) => {
           const glyphs = heading.querySelectorAll(".char-glyph");
           if (!glyphs.length) return;
           gsap.to(glyphs, {
@@ -1088,10 +1109,31 @@
             scheduleGlitch();
           }, gsap.utils.random(4200, 7600));
         };
-        scheduleGlitch();
+        if (!reduceMotion) scheduleGlitch();
 
         gsap.utils.toArray(".project-card").forEach((card, index) => {
           const direction = index % 2 === 0 ? -1 : 1;
+          if (reduceMotion) {
+            gsap.fromTo(card, {
+              autoAlpha: .72,
+              y: 8,
+              scale: .99,
+              filter: "blur(1px)"
+            }, {
+              autoAlpha: 1,
+              y: 0,
+              scale: 1,
+              filter: "blur(0px)",
+              duration: .28,
+              ease: "power1.out",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 96%",
+                toggleActions: "play none none reverse"
+              }
+            });
+            return;
+          }
           const travel = gsap.timeline({
             scrollTrigger: {
               trigger: card,
@@ -1133,12 +1175,12 @@
 
         gsap.utils.toArray(".skill-module").forEach((module, index) => {
           gsap.fromTo(module, {
-            autoAlpha: .2,
-            y: 46,
-            z: -55,
-            rotateX: 13,
-            scale: .91,
-            filter: "blur(6px)"
+            autoAlpha: reduceMotion ? .78 : .2,
+            y: reduceMotion ? 5 : 46,
+            z: reduceMotion ? 0 : -55,
+            rotateX: reduceMotion ? 0 : 13,
+            scale: reduceMotion ? .99 : .91,
+            filter: reduceMotion ? "blur(.5px)" : "blur(6px)"
           }, {
             autoAlpha: 1,
             y: 0,
@@ -1146,13 +1188,38 @@
             rotateX: 0,
             scale: 1,
             filter: "blur(0px)",
-            duration: .9,
+            duration: reduceMotion ? .26 : .9,
             delay: (index % 3) * .08,
             ease: "power3.out",
-            scrollTrigger: { trigger: module, start: "top 92%", end: "top 58%", scrub: .7 }
+            scrollTrigger: reduceMotion
+              ? { trigger: module, start: "top 96%", toggleActions: "play none none reverse" }
+              : { trigger: module, start: "top 92%", end: "top 58%", scrub: .7 }
           });
         });
 
+        if (reduceMotion) {
+          const verticalJourney = window.matchMedia("(max-width: 720px)").matches;
+          gsap.set(".journey-line-fill", verticalJourney ? { width: "100%", height: "0%" } : { width: "0%", height: "100%" });
+          gsap.to(".journey-line-fill", verticalJourney ? {
+            height: "100%",
+            duration: .35,
+            ease: "power1.out",
+            scrollTrigger: {
+              trigger: ".journey-track",
+              start: "top 90%",
+              toggleActions: "play none none reverse"
+            }
+          } : {
+            width: "100%",
+            duration: .35,
+            ease: "power1.out",
+            scrollTrigger: {
+              trigger: ".journey-track",
+              start: "top 90%",
+              toggleActions: "play none none reverse"
+            }
+          });
+        } else {
         gsap.matchMedia().add("(min-width: 721px)", () => {
           gsap.fromTo(".journey-line-fill", { width: "0%" }, {
             width: "100%",
@@ -1176,6 +1243,7 @@
             scrollTrigger: { trigger: node.closest(".journey-step"), start: "top 78%", end: "top 52%", scrub: .6 }
           });
         });
+        }
 
         const parallaxLayers = [
           [".hero-grid", -18],
@@ -1183,7 +1251,7 @@
           [".about-visual", -16],
           [".journey-orbit", 23]
         ];
-        parallaxLayers.forEach(([selector, distance]) => {
+        (reduceMotion ? [] : parallaxLayers).forEach(([selector, distance]) => {
           gsap.utils.toArray(selector).forEach((layer) => {
             gsap.to(layer, {
               y: distance,
@@ -1197,13 +1265,13 @@
             });
           });
         });
-        gsap.to(".hero-visual", {
+        if (!reduceMotion) gsap.to(".hero-visual", {
           y: 125,
           opacity: .2,
           ease: "none",
           scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 }
         });
-        gsap.utils.toArray(".project-art").forEach((art, index) => {
+        if (!reduceMotion) gsap.utils.toArray(".project-art").forEach((art, index) => {
           gsap.fromTo(art, { y: 34, rotateX: 5 }, {
             y: -24,
             rotateX: 0,
@@ -1211,7 +1279,7 @@
             scrollTrigger: { trigger: art.closest(".project-card"), start: "top bottom", end: "bottom top", scrub: 1 + index * .12 }
           });
         });
-        gsap.matchMedia().add("(min-width: 1000px)", () => {
+        if (!reduceMotion) gsap.matchMedia().add("(min-width: 1000px)", () => {
           ScrollTrigger.create({
             trigger: "#system .system-layout",
             start: "top center",
@@ -1404,7 +1472,8 @@
 
       const coreCanvas = document.getElementById("core3d");
       if (window.THREE && coreCanvas) {
-        try {
+        const mountCore = (vertexShader, fragmentShader) => {
+          try {
           const renderer = new THREE.WebGLRenderer({ canvas: coreCanvas, alpha: true, antialias: true });
           renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
           renderer.setSize(coreCanvas.clientWidth, coreCanvas.clientHeight, false);
@@ -1417,28 +1486,8 @@
             new THREE.IcosahedronGeometry(1.55, 2),
             new THREE.ShaderMaterial({
               uniforms: { uTime: { value: 0 } },
-              vertexShader: `
-                varying vec3 vNormal;
-                varying vec3 vPosition;
-                void main() {
-                  vNormal = normalize(normalMatrix * normal);
-                  vPosition = position;
-                  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                }
-              `,
-              fragmentShader: `
-                uniform float uTime;
-                varying vec3 vNormal;
-                varying vec3 vPosition;
-                void main() {
-                  float fresnel = pow(1.0 - abs(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0))), 1.6);
-                  float pulse = 0.5 + 0.5 * sin(uTime + vPosition.y * 2.4);
-                  vec3 cyan = vec3(0.22, 0.92, 1.0);
-                  vec3 violet = vec3(0.58, 0.35, 1.0);
-                  vec3 color = mix(cyan, violet, 0.5 + 0.5 * sin(uTime * 0.35 + vPosition.y));
-                  gl_FragColor = vec4(color, 0.12 + fresnel * (0.16 + pulse * 0.13));
-                }
-              `,
+              vertexShader,
+              fragmentShader,
               transparent: true,
               depthWrite: false,
               blending: THREE.AdditiveBlending
@@ -1503,9 +1552,50 @@
           };
           resizeCore();
           requestAnimationFrame(renderCore);
-        } catch (error) {
-          console.warn("3D core could not initialize; decorative CSS visualization remains active.", error);
+          } catch (error) {
+            console.warn("3D core could not initialize; decorative CSS visualization remains active.", error);
+          }
+        };
+        const fallbackVertexShader = `varying vec3 vNormal;
+varying vec3 vPosition;
+void main() {
+  vNormal = normalize(normalMatrix * normal);
+  vPosition = position;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+}`;
+        const fallbackFragmentShader = `uniform float uTime;
+varying vec3 vNormal;
+varying vec3 vPosition;
+void main() {
+  float fresnel = pow(1.0 - abs(dot(normalize(vNormal), vec3(0.0, 0.0, 1.0))), 1.6);
+  float pulse = 0.5 + 0.5 * sin(uTime + vPosition.y * 2.4);
+  vec3 cyan = vec3(0.22, 0.92, 1.0);
+  vec3 violet = vec3(0.58, 0.35, 1.0);
+  vec3 color = mix(cyan, violet, 0.5 + 0.5 * sin(uTime * 0.35 + vPosition.y));
+  gl_FragColor = vec4(color, 0.12 + fresnel * (0.16 + pulse * 0.13));
+}`;
+        if (location.protocol === "file:") {
+          console.info("Using embedded AI core shaders when opened directly from disk.");
+          mountCore(fallbackVertexShader, fallbackFragmentShader);
+        } else {
+          Promise.all([
+            fetch("./assets/shaders/ai-core.vert.glsl").then((response) => {
+              if (!response.ok) throw new Error(`Vertex shader request failed: ${response.status}`);
+              return response.text();
+            }),
+            fetch("./assets/shaders/ai-core.frag.glsl").then((response) => {
+              if (!response.ok) throw new Error(`Fragment shader request failed: ${response.status}`);
+              return response.text();
+            })
+          ]).then(([vertexShader, fragmentShader]) => {
+            mountCore(vertexShader, fragmentShader);
+          }).catch((error) => {
+            console.error("Local AI core shaders could not load; using the embedded fallback.", error);
+            mountCore(fallbackVertexShader, fallbackFragmentShader);
+          });
         }
+      } else if (coreCanvas) {
+        console.error("Three.js is unavailable; verify the local vendor script is present.");
       }
     })();
   </script>
