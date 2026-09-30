@@ -1,1 +1,47 @@
+:root {
+  --motion-fast: 240ms;
+  --motion-medium: 520ms;
+  --motion-slow: 900ms;
+  --motion-ease: cubic-bezier(.2, .75, .25, 1);
+}
 
+html {
+  scroll-padding-top: 76px;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent, #54efff);
+  outline-offset: 4px;
+}
+
+.text-motion {
+  display: contents;
+}
+
+.text-space {
+  white-space: pre;
+}
+
+.sr-only-motion {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
