@@ -8,9 +8,6 @@
   <title>KNOXXZONE® — Ayush Singh / Digital lifeform</title>
   <link rel="icon" type="image/svg+xml" href="./assets/icons/brand-k.svg">
   <link rel="preload" as="image" href="./assets/illustrations/ai-core.svg" fetchpriority="high">
-  <link rel="preload" as="script" href="./assets/vendor/three-r128.min.js">
-  <link rel="preload" as="script" href="./assets/vendor/gsap-3.12.5.min.js">
-  <link rel="preload" as="script" href="./assets/vendor/ScrollTrigger-3.12.5.min.js">
   <style>
     :root {
       color-scheme: dark;
@@ -47,7 +44,7 @@
     .cursor { position: fixed; z-index: 100; top: 0; left: 0; width: 8px; height: 8px; border-radius: 50%; background: var(--acid); pointer-events: none; mix-blend-mode: difference; transform: translate(-50%,-50%); transition: width .22s, height .22s, opacity .22s; }
     .cursor.is-hover { width: 38px; height: 38px; }
     .progress-line { position: fixed; z-index: 80; top: 0; left: 0; width: 100%; height: 2px; transform: scaleX(0); transform-origin: left; background: var(--acid); box-shadow: 0 0 14px var(--acid); }
-    .loader { position: fixed; z-index: 120; inset: 0; display: grid; place-items: center; padding: 24px; background: #07090b; transition: opacity .75s var(--ease), visibility .75s; }
+    .loader { position: fixed; z-index: 120; inset: 0; display: grid; place-items: center; padding: 24px; background: #07090b; transition: opacity .32s var(--ease), visibility .32s; }
     .loader.done { opacity: 0; visibility: hidden; }
     .loader-inner { width: min(370px,100%); }
     .loader-brand { display: flex; justify-content: space-between; align-items: center; font: 10px var(--mono); letter-spacing: .12em; color: var(--muted); }
@@ -58,18 +55,18 @@
     .loader-core { width: 38px; height: 38px; border-radius: 50%; background: radial-gradient(circle at 34% 28%,#efffc7 0,#c9ff41 23%,#608b18 65%,#182408 100%); box-shadow: 0 0 25px rgba(201,255,65,.35),0 0 68px rgba(201,255,65,.16); animation: breathe 1.8s ease-in-out infinite alternate; }
     .loader-lines { display: grid; gap: 11px; min-height: 79px; color: #9da79b; font: 10px/1.5 var(--mono); }
     .loader-line { opacity: 0; animation: boot .38s forwards; }
-    .loader-line:nth-child(2) { animation-delay: .48s; }
-    .loader-line:nth-child(3) { animation-delay: .96s; }
-    .loader-line:nth-child(4) { animation-delay: 1.44s; color: var(--acid); }
+    .loader-line:nth-child(2) { animation-delay: .1s; }
+    .loader-line:nth-child(3) { animation-delay: .2s; }
+    .loader-line:nth-child(4) { animation-delay: .3s; color: var(--acid); }
     .loader-bottom { display: flex; justify-content: space-between; align-items: center; margin-top: 25px; color: var(--muted); font: 9px var(--mono); text-transform: uppercase; }
     .loader-track { height: 2px; margin-top: 11px; background: #1b221b; overflow: hidden; }
-    .loader-fill { width: 0; height: 100%; background: var(--acid); box-shadow: 0 0 12px var(--acid); animation: loading 2.05s var(--ease) forwards; }
+    .loader-fill { width: 0; height: 100%; background: var(--acid); box-shadow: 0 0 12px var(--acid); animation: loading .7s var(--ease) forwards; }
     @keyframes loading { to { width: 100%; } }
     @keyframes boot { to { opacity: 1; } }
     @keyframes spin { to { transform: rotate(360deg); } }
     @keyframes breathe { to { transform: scale(1.18); filter: brightness(1.35); } }
     .nav-shell { position: fixed; z-index: 70; top: 0; width: 100%; border-bottom: 1px solid transparent; transition: background .3s,border-color .3s; }
-    .nav-shell.scrolled { background: rgba(7,9,11,.82); border-color: var(--line); backdrop-filter: blur(16px); }
+    .nav-shell.scrolled { background: rgba(7,9,11,.92); border-color: var(--line); }
     .nav { display: flex; align-items: center; justify-content: space-between; width: var(--page); height: 76px; margin: auto; }
     .brand { display: inline-flex; align-items: center; gap: 11px; font: 700 15px var(--display); letter-spacing: -.04em; }
     .brand-mark { display: grid; place-items: center; width: 29px; height: 29px; color: var(--bg); background: var(--acid); border-radius: 8px; font: 700 15px var(--display); overflow: hidden; }
@@ -90,9 +87,9 @@
     .hero-content { position: relative; z-index: 2; width: var(--page); margin: 76px auto 0; }
     .hero-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 34px; color: #a8b0a6; font: 10px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
     .hero-kicker .line { width: 34px; height: 1px; background: var(--acid); box-shadow: 0 0 10px var(--acid); }
-    .hero-title { max-width: 900px; margin: 0; font: 600 clamp(68px,11.2vw,158px)/.83 var(--display); letter-spacing: -.095em; text-transform: uppercase; }
+    .hero-title { max-width: 900px; margin: 0; font: 600 clamp(68px,9.5vw,122px)/.83 var(--display); letter-spacing: -.095em; text-transform: uppercase; }
     .hero-title .line-wrap { display: block; overflow: hidden; padding: .06em .1em .14em 0; }
-    .hero-title .line-inner { display: block; transform: translateY(115%); animation: title-in .95s var(--ease) forwards; }
+    .hero-title .line-inner { display: block; transform: translateY(115%); animation: title-in .72s var(--ease) forwards; }
     .hero-title .line-wrap:nth-child(2) .line-inner { animation-delay: .14s; }
     @keyframes title-in { to { transform: translateY(0); } }
     .hero-title .outline { color: transparent; -webkit-text-stroke: 1px rgba(238,243,232,.74); }
@@ -109,7 +106,7 @@
     .button.primary::before { background: #e0ff96; }
     .button .arrow { display: inline-block; font-size: 15px; transition: transform .25s; }
     .button:hover .arrow { transform: translate(3px,-3px); }
-    .hero-visual { position: absolute; z-index: 1; top: 50%; right: max(5vw,calc((100vw - 1280px)/2)); width: min(43vw,560px); aspect-ratio: 1; transform: translateY(-49%); pointer-events: none; }
+    .hero-visual { position: absolute; z-index: 1; top: 50%; right: max(5vw,calc((100vw - 1280px)/2)); width: min(36vw,460px); aspect-ratio: 1; transform: translateY(-49%); pointer-events: none; }
     .core-halo { position: absolute; inset: 10%; border: 1px solid rgba(201,255,65,.18); border-radius: 50%; box-shadow: inset 0 0 90px rgba(201,255,65,.035),0 0 100px rgba(201,255,65,.06); animation: halo 8s ease-in-out infinite alternate; }
     .core-halo::before,.core-halo::after { position: absolute; content: ""; border: 1px dashed rgba(201,255,65,.24); border-radius: 50%; inset: 9%; transform: rotateX(68deg) rotate(-25deg); }
     .core-halo::after { inset: -9%; border-color: rgba(134,236,215,.16); transform: rotateY(65deg) rotate(25deg); }
@@ -130,11 +127,11 @@
     .marquee-track span { display: inline-flex; align-items: center; gap: 27px; padding: 0 25px; color: #89938a; font: 9px var(--mono); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; }
     .marquee-track span::after { color: var(--acid); content: "✳"; font-size: 12px; }
     @keyframes marquee { to { transform: translateX(-50%); } }
-    .section { position: relative; padding: 142px 0; }
-    .section-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 40px; margin-bottom: 62px; }
+    .section { position: relative; padding: 120px 0; }
+    .section-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; margin-bottom: 54px; }
     .section-title { max-width: 750px; margin: 18px 0 0; font: 500 clamp(42px,6.4vw,82px)/.98 var(--display); letter-spacing: -.075em; }
     .section-title .dim { color: #59635b; }
-    .section-aside { max-width: 230px; margin-top: 29px; color: var(--muted); font-size: 12px; line-height: 1.8; }
+    .section-aside { max-width: 280px; margin: 0 0 6px; color: #9aa4b7; font-size: 13px; line-height: 1.75; }
     .about-grid { display: grid; grid-template-columns: 1.02fr .98fr; gap: 80px; align-items: center; }
     .about-visual { position: relative; min-height: 425px; overflow: hidden; border: 1px solid var(--line); background: radial-gradient(ellipse at 48% 43%,rgba(143,218,128,.12),transparent 35%),linear-gradient(138deg,#141b17,#0b0e0e 55%,#0c1110); }
     .about-visual::before { position: absolute; inset: 0; background: linear-gradient(90deg,transparent 49.9%,rgba(212,238,199,.1) 50%,transparent 50.1%),linear-gradient(transparent 49.9%,rgba(212,238,199,.1) 50%,transparent 50.1%); background-size: 43px 43px; mask-image: radial-gradient(ellipse,black,transparent 72%); content: ""; }
@@ -180,8 +177,8 @@
     .skill-row { display: grid; grid-template-columns: 145px 1fr 38px; align-items: center; gap: 17px; }
     .skill-name { color: #c5cec5; font: 10px var(--mono); text-transform: uppercase; }
     .skill-track { height: 3px; background: #1b2420; overflow: hidden; }
-    .skill-fill { width: 0; height: 100%; background: linear-gradient(90deg,#5e8c27,var(--acid)); box-shadow: 0 0 11px rgba(201,255,65,.45); transition: width 1.25s var(--ease); }
-    .skills-panel.in .skill-fill { width: var(--level); }
+    .skill-fill { width: 100%; height: 100%; background: linear-gradient(90deg,#5e8c27,var(--acid)); box-shadow: 0 0 11px rgba(201,255,65,.45); transform: scaleX(0); transform-origin: left; transition: transform .8s var(--ease); }
+    .skills-panel.in .skill-fill { transform: scaleX(var(--level)); }
     .skill-value { color: var(--acid); text-align: right; font: 9px var(--mono); }
     .skill-note { margin-top: 9px; color: #657068; font: 9px/1.7 var(--mono); }
     .project-head { align-items: end; }
@@ -195,12 +192,13 @@
     .project-top .arrow-circle { display: grid; place-items: center; width: 31px; height: 31px; border: 1px solid var(--line); border-radius: 50%; color: var(--acid); font-size: 14px; transition: transform .3s,background .3s; }
     .project-card:hover .arrow-circle { transform: rotate(45deg); border-color: var(--acid); background: rgba(201,255,65,.08); }
     .project-art { position: absolute; top: 13%; right: 5%; bottom: 26%; left: 5%; display: grid; place-items: center; }
+    .project-card:first-child .project-art { bottom: 42%; }
     .land-map { position: relative; width: 82%; height: 100%; min-height: 240px; border: 1px solid rgba(139,245,221,.16); background: radial-gradient(ellipse at 48% 46%,rgba(33,92,76,.3),transparent 65%),linear-gradient(145deg,rgba(24,43,39,.42),rgba(10,16,15,.1)); overflow: hidden; }
     .land-map::before { position: absolute; inset: 0; background: repeating-linear-gradient(30deg,transparent 0 27px,rgba(139,245,221,.1) 28px,transparent 29px),repeating-linear-gradient(150deg,transparent 0 33px,rgba(139,245,221,.08) 34px,transparent 35px); content: ""; mask-image: radial-gradient(ellipse,black,transparent 75%); }
     .map-contour { position: absolute; top: 16%; left: 18%; width: 64%; height: 65%; border: 1px solid rgba(139,245,221,.32); border-radius: 48% 41% 55% 38%; transform: rotate(-21deg); }
     .map-contour:nth-child(2) { inset: 25% 27%; border-color: rgba(139,245,221,.2); transform: rotate(29deg); }
     .map-contour:nth-child(3) { inset: 34% 37%; border-color: rgba(201,255,65,.55); transform: rotate(-13deg); }
-    .map-pin { position: absolute; top: 47%; left: 52%; width: 9px; height: 9px; border: 2px solid #dfff96; border-radius: 50%; background: var(--acid); box-shadow: 0 0 15px var(--acid); animation: ping 2s ease-out infinite; }
+    .map-pin { position: absolute; top: 47%; left: 52%; width: 9px; height: 9px; border: 2px solid #dfff96; border-radius: 50%; background: var(--acid); box-shadow: 0 0 15px var(--acid); animation: ping 2.8s ease-out 2; }
     @keyframes ping { 70%,100% { box-shadow: 0 0 0 12px rgba(201,255,65,0); } }
     .map-coord { position: absolute; color: rgba(139,245,221,.56); font: 7px var(--mono); }
     .map-coord.c1 { top: 13px; left: 13px; }.map-coord.c2 { right: 13px; bottom: 13px; }
@@ -221,7 +219,9 @@
     .project-info h3.is-glowing { text-shadow: 0 0 18px rgba(var(--accent-rgb),.4); }
     .project-info p { max-width: 420px; margin: 0; color: #909a91; font-size: 11px; line-height: 1.7; }
     .project-card.small { min-height: 291px; }
-    .project-card.small .project-art { top: 7%; right: 7%; bottom: 37%; left: 7%; }
+    .project-card.small .project-art { top: 7%; right: 7%; bottom: 48%; left: 7%; }
+    .project-card.small .orbit-art { transform: scale(.6); }
+    .project-card.small .block-art { transform: perspective(400px) rotateX(56deg) rotateZ(-37deg) scale(.6); }
     .project-card.small .project-info { right: 21px; bottom: 20px; left: 21px; }
     .project-card.small .project-info h3 { font-size: 22px; }
     .project-card.small .project-info p { font-size: 10px; }
@@ -249,15 +249,10 @@
     .footer-quote { margin-top: 8px; color: #778178; font: 9px var(--mono); }
     .footer-status { display: flex; align-items: center; gap: 9px; color: #abb5aa; font: 9px var(--mono); text-transform: uppercase; letter-spacing: .07em; }
     .footer-bottom { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0 20px; border-top: 1px solid rgba(218,233,218,.07); color: #5f695f; font: 8px var(--mono); text-transform: uppercase; letter-spacing: .05em; }
-    [data-reveal] { opacity: 0; transform: translateY(24px); filter: blur(6px); transition: opacity .8s var(--ease),transform .8s var(--ease),filter .8s var(--ease); }
-    [data-reveal].in-view { opacity: 1; transform: none; filter: blur(0); }
-    [data-reveal="left"] { transform: translateX(-24px); }
-    [data-reveal="right"] { transform: translateX(24px); }
-    [data-reveal="scale"] { transform: scale(.96); }
     @media (max-width: 1000px) {
       :root { --page: min(100% - 56px,850px); }
-      .hero-visual { right: -4vw; width: 52vw; opacity: .7; }
-      .hero-title { font-size: clamp(68px,12vw,125px); }
+      .hero-visual { right: -4vw; width: 39vw; opacity: .35; }
+      .hero-title { font-size: clamp(68px,10.5vw,105px); }
       .about-grid { gap: 40px; }
       .system-layout { gap: 45px; }
       .project-card { min-height: 390px; }
@@ -274,10 +269,10 @@
       .nav-links.open { opacity: 1; visibility: visible; transform: none; }
       .nav-links a { padding: 15px 0; border-bottom: 1px solid rgba(218,233,218,.08); }
       .nav-links a:last-child { border: 0; }
-      .hero { min-height: 790px; min-height: max(790px,100svh); align-items: center; }
+      .hero { min-height: max(700px,100svh); align-items: center; }
       .hero-content { margin-top: 39px; }
       .hero-kicker { margin-bottom: 25px; font-size: 8px; }
-      .hero-title { position: relative; z-index: 2; font-size: clamp(62px,14vw,100px); }
+      .hero-title { position: relative; z-index: 2; font-size: clamp(48px,13vw,86px); }
       .hero-visual { top: 45%; right: -33%; width: 88vw; opacity: .38; }
       .hero-caption-row { position: relative; z-index: 3; align-items: flex-start; flex-direction: column; gap: 0; margin-top: 20px; }
       .hero-caption { max-width: 315px; font-size: 12px; }
@@ -286,13 +281,13 @@
       .hero-index { bottom: 23px; left: 20px; font-size: 8px; }
       .scroll-cue { right: 20px; bottom: 17px; font-size: 8px; }
       .scroll-cue i { height: 26px; }
-      .section { padding: 92px 0; }
+      .section { padding: 78px 0; }
       .section-head { display: block; margin-bottom: 40px; }
       .section-title { margin-top: 16px; font-size: clamp(43px,10vw,67px); }
-      .section-aside { margin-top: 19px; }
+      .section-aside { max-width: 38em; margin-top: 16px; }
       .about-grid,.system-layout { grid-template-columns: 1fr; gap: 34px; }
-      .about-visual { min-height: 330px; }
-      .about-copy .lead { font-size: 30px; }
+      .about-visual { min-height: 300px; }
+      .about-copy .lead { font-size: clamp(25px,7vw,30px); line-height: 1.18; }
       .system-layout { gap: 48px; }
       .skill-row { grid-template-columns: 115px 1fr 30px; gap: 10px; }
       .skill-name { font-size: 8px; }
@@ -313,7 +308,10 @@
     }
     @media (max-width: 390px) {
       :root { --page: calc(100vw - 32px); }
-      .hero-title { font-size: 58px; }
+      .hero-title { font-size: 48px; }
+      .project-card:first-child { min-height: 520px; }
+      .project-card.small .orbit-art { transform: scale(.8); }
+      .project-card.small .block-art { transform: perspective(400px) rotateX(56deg) rotateZ(-37deg) scale(.8); }
       .hero-actions { gap: 7px; }
       .button { padding-inline: 10px; font-size: 8px; }
       .skills-cloud { grid-template-columns: 1fr; }
@@ -333,7 +331,7 @@
     :root { --acid: #54efff; --cyan: #b39aff; --line: rgba(176,214,255,.15); }
     html { scrollbar-color: #51457f #050610; }
     body { background: #050610; }
-    body::before { position: fixed; z-index: -1; inset: 0; background: radial-gradient(ellipse at var(--glow-x,70%) var(--glow-y,12%),rgba(var(--accent-rgb),.12),transparent 40%),radial-gradient(ellipse at 5% 90%,rgba(99,63,185,.12),transparent 42%),#050610; content: ""; pointer-events: none; transition: background .8s ease; }
+    body::before { position: fixed; z-index: -1; inset: 0; background: radial-gradient(ellipse at var(--glow-x,70%) var(--glow-y,12%),rgba(var(--accent-rgb),.12),transparent 40%),radial-gradient(ellipse at 5% 90%,rgba(99,63,185,.12),transparent 42%),#050610; content: ""; pointer-events: none; }
     ::selection { background: var(--accent); color: #050610; }
     .noise { opacity: .05; }
     .cursor { width: 6px; height: 6px; background: var(--accent); box-shadow: 0 0 14px var(--accent); mix-blend-mode: screen; }
@@ -411,10 +409,10 @@
     .story-index a.active { color: var(--accent); font-size: 8px; }
     .story-index a.active::after { width: 8px; height: 8px; border-color: var(--accent); background: var(--accent); box-shadow: 0 0 12px var(--accent); }
     .hero-roles { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 17px; }
-    .hero-roles span { padding: 7px 9px; border: 1px solid rgba(150,182,255,.2); background: rgba(10,14,34,.48); color: #b6c4e2; font: 8px var(--mono); letter-spacing: .08em; text-transform: uppercase; backdrop-filter: blur(12px); }
+    .hero-roles span { padding: 7px 9px; border: 1px solid rgba(150,182,255,.2); background: rgba(10,14,34,.72); color: #b6c4e2; font: 8px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
     .loader { background: radial-gradient(ellipse at 50% 48%,#111631,#050610 55%); }
-    .loader.done .loader-orbit { animation: core-burst .62s cubic-bezier(.2,.8,.2,1) forwards; }
-    @keyframes core-burst { 55% { transform: scale(1.42); filter: brightness(1.8); opacity: .9; } 100% { transform: scale(2.8); filter: brightness(2.2); opacity: 0; } }
+    .loader.done .loader-orbit { animation: core-burst .32s cubic-bezier(.2,.8,.2,1) forwards; }
+    @keyframes core-burst { to { transform: scale(1.2); opacity: 0; } }
     .loader-orbit { border-color: rgba(105,190,255,.2); box-shadow: 0 0 50px rgba(91,106,255,.1); }
     .loader-orbit::before { border-color: rgba(90,205,255,.4); }
     .loader-orbit::after { border-top-color: #54efff; border-right-color: rgba(159,110,255,.7); }
@@ -440,7 +438,7 @@
     .journey .wrap { position: relative; z-index: 1; }
     .journey-track { position: relative; display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 76px; }
     .journey-line { position: absolute; top: 11px; right: 5%; left: 5%; height: 1px; background: rgba(161,133,255,.2); }
-    .journey-line-fill { width: 0; height: 100%; background: linear-gradient(90deg,#56eaff,#a17bff,#ff9865); box-shadow: 0 0 14px rgba(133,117,255,.6); }
+    .journey-line-fill { width: 100%; height: 100%; background: linear-gradient(90deg,#56eaff,#a17bff,#ff9865); box-shadow: 0 0 14px rgba(133,117,255,.6); transform: scaleX(0); transform-origin: left center; }
     .journey-step { position: relative; padding-top: 39px; }
     .journey-node { position: absolute; top: 0; left: 0; width: 23px; height: 23px; border: 1px solid rgba(135,224,255,.5); border-radius: 50%; background: #101124; box-shadow: 0 0 0 6px rgba(99,120,255,.06); }
     .journey-node::after { position: absolute; inset: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 12px var(--accent); content: ""; }
@@ -452,20 +450,20 @@
     .journey-orbit::after { inset: 5%; transform: rotateY(67deg) rotate(35deg); animation-duration: 45s; }
     .skill-module { position: relative; overflow: hidden; border-top: 1px solid rgba(100,226,255,0); transition: background .35s,border-color .35s,box-shadow .35s; }
     .skill-module::after { position: absolute; top: 0; left: -120%; width: 70%; height: 1px; background: linear-gradient(90deg,transparent,#72efff,transparent); content: ""; transition: left .65s var(--ease); }
-    .skill-module:hover { border-top-color: rgba(100,226,255,.4); box-shadow: 0 18px 50px rgba(55,102,210,.13),inset 0 0 40px rgba(83,208,255,.035); }
+    .skill-module:hover { border-top-color: rgba(100,226,255,.4); }
     .skill-module:hover::after { left: 130%; }
     .map-contour { animation: contour-float 7s ease-in-out infinite alternate; }
     .map-contour:nth-child(2) { animation-delay: -2s; }
     .map-contour:nth-child(3) { animation-delay: -4s; }
     @keyframes contour-float { to { transform: translate3d(0,-8px,0) rotate(8deg) scale(1.04); } }
-    .project-card.is-leaving { filter: blur(8px); }
+    .project-card.is-leaving { opacity: .5; }
     .text-motion { display: contents; }
     html,body { max-width: 100%; overflow-x: clip; }
     @supports not (overflow: clip) { html,body { overflow-x: hidden; } }
     @media (max-width: 720px) {
       .journey-track { grid-template-columns: 1fr; gap: 27px; margin-top: 48px; }
       .journey-line { top: 5px; bottom: 7px; left: 10px; width: 1px; height: auto; }
-      .journey-line-fill { width: 100%; height: 0; }
+      .journey-line-fill { transform: scaleY(0); transform-origin: center top; }
       .journey-step { padding: 0 0 6px 43px; }
       .journey-node { top: -3px; }
       .journey-step h3 { margin-top: 8px; }
@@ -501,8 +499,8 @@
     <nav class="nav" aria-label="Main navigation">
       <a class="brand" href="#top" aria-label="KNOXXZONE home"><span class="brand-mark"><img src="./assets/icons/brand-k.svg" width="29" height="29" alt="" aria-hidden="true"></span><span>KNOXXZONE<sup>®</sup></span></a>
       <div class="nav-status"><i class="status-dot"></i><span>Available to build</span></div>
-      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span></span><span></span></button>
-      <div class="nav-links">
+      <button class="menu-toggle" aria-label="Open navigation" aria-controls="primary-navigation" aria-expanded="false"><span></span><span></span></button>
+      <div class="nav-links" id="primary-navigation">
         <a href="#about">About</a><a href="#system">System</a><a href="#work">Selected work</a><a href="#skills">Capabilities</a><a href="#journey">Journey</a><a href="#contact">Connect ↗</a>
       </div>
     </nav>
@@ -555,8 +553,8 @@
           <p>Right now that means building for people, experimenting with AI, and staying open to whatever the next rabbit hole turns out to be.</p>
           <div class="interest-list"><span class="chip">Artificial intelligence</span><span class="chip">Web development</span><span class="chip">Open source</span><span class="chip">Gaming technology</span><span class="chip">Creative coding</span></div>
           <div class="about-meta">
-            <div class="meta-cell"><small><img src="./assets/icons/education.svg" width="14" height="14" alt="" aria-hidden="true">Currently studying</small><strong>B.Tech CSE<br>AI &amp; Machine Learning</strong></div>
-            <div class="meta-cell"><small><img src="./assets/icons/contact.svg" width="14" height="14" alt="" aria-hidden="true">Coordinates</small><strong>Chennai, India<br>13.0827° N / 80.2707° E</strong></div>
+            <div class="meta-cell"><small><img src="./assets/icons/education.svg" width="14" height="14" alt="" aria-hidden="true" loading="lazy">Currently studying</small><strong>B.Tech CSE<br>AI &amp; Machine Learning</strong></div>
+            <div class="meta-cell"><small><img src="./assets/icons/contact.svg" width="14" height="14" alt="" aria-hidden="true" loading="lazy">Coordinates</small><strong>Chennai, India<br>13.0827° N / 80.2707° E</strong></div>
           </div>
         </div>
       </div>
@@ -581,10 +579,10 @@
             <div class="terminal-foot"><span>SESSION: AYUSH-S / 001</span><span>ENCRYPTION: OPEN</span></div>
           </div>
           <div class="skills-panel" data-reveal="right" aria-label="Self-assessed development focus">
-            <div class="skill-row"><span class="skill-name">AI development</span><div class="skill-track"><div class="skill-fill" style="--level:80%"></div></div><span class="skill-value">80%</span></div>
-            <div class="skill-row"><span class="skill-name">Web development</span><div class="skill-track"><div class="skill-fill" style="--level:90%"></div></div><span class="skill-value">90%</span></div>
-            <div class="skill-row"><span class="skill-name">Machine learning</span><div class="skill-track"><div class="skill-fill" style="--level:70%"></div></div><span class="skill-value">70%</span></div>
-            <div class="skill-row"><span class="skill-name">Creative coding</span><div class="skill-track"><div class="skill-fill" style="--level:85%"></div></div><span class="skill-value">85%</span></div>
+            <div class="skill-row"><span class="skill-name">AI development</span><div class="skill-track"><div class="skill-fill" style="--level:.8"></div></div><span class="skill-value">80%</span></div>
+            <div class="skill-row"><span class="skill-name">Web development</span><div class="skill-track"><div class="skill-fill" style="--level:.9"></div></div><span class="skill-value">90%</span></div>
+            <div class="skill-row"><span class="skill-name">Machine learning</span><div class="skill-track"><div class="skill-fill" style="--level:.7"></div></div><span class="skill-value">70%</span></div>
+            <div class="skill-row"><span class="skill-name">Creative coding</span><div class="skill-track"><div class="skill-fill" style="--level:.85"></div></div><span class="skill-value">85%</span></div>
             <p class="skill-note">THESE ARE PERSONAL LEARNING INDICATORS — NOT BENCHMARK SCORES. ALWAYS A WORK IN PROGRESS.</p>
           </div>
         </div>
@@ -620,12 +618,12 @@
           <p class="section-aside">Languages and tools I've worked with, explored, or am actively learning. The list moves as I do.</p>
         </div>
         <div class="skills-cloud" data-reveal>
-          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/coding.svg" width="16" height="16" alt="" aria-hidden="true">01 / Languages</span><b>CORE</b></div><div class="module-tags"><span>C</span><span>C++</span><span>Python</span><span>Java</span><span>JavaScript</span></div><p>Learning the language of computers, one good error message at a time.</p></div>
-          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/projects.svg" width="16" height="16" alt="" aria-hidden="true">02 / Frontend</span><b>INTERFACE</b></div><div class="module-tags"><span>React</span><span>Next.js</span><span>HTML</span><span>CSS</span><span>Tailwind</span></div><p>Thoughtful interfaces with a little extra personality.</p></div>
-          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/coding.svg" width="16" height="16" alt="" aria-hidden="true">03 / Backend</span><b>SYSTEMS</b></div><div class="module-tags"><span>Node.js</span><span>Express</span></div><p>Connecting the pieces behind the pixels.</p></div>
-          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/machine-learning.svg" width="16" height="16" alt="" aria-hidden="true">04 / Data</span><b>MEMORY</b></div><div class="module-tags"><span>MongoDB</span><span>MySQL</span></div><p>Giving ideas a place to live and grow.</p></div>
-          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/ai.svg" width="16" height="16" alt="" aria-hidden="true">05 / Intelligence</span><b>LEARNING</b></div><div class="module-tags"><span>Machine learning</span><span>TensorFlow</span><span>Data science</span></div><p>Finding patterns, asking better questions, iterating.</p></div>
-          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/gaming.svg" width="16" height="16" alt="" aria-hidden="true">06 / Workshop</span><b>TOOLING</b></div><div class="module-tags"><span>VS Code</span><span>Git</span><span>GitHub</span><span>Vercel</span><span>Figma</span></div><p>The everyday kit for turning sketches into shipped things.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/coding.svg" width="16" height="16" alt="" aria-hidden="true" loading="lazy">01 / Languages</span><b>CORE</b></div><div class="module-tags"><span>C</span><span>C++</span><span>Python</span><span>Java</span><span>JavaScript</span></div><p>Learning the language of computers, one good error message at a time.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/projects.svg" width="16" height="16" alt="" aria-hidden="true" loading="lazy">02 / Frontend</span><b>INTERFACE</b></div><div class="module-tags"><span>React</span><span>Next.js</span><span>HTML</span><span>CSS</span><span>Tailwind</span></div><p>Thoughtful interfaces with a little extra personality.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/coding.svg" width="16" height="16" alt="" aria-hidden="true" loading="lazy">03 / Backend</span><b>SYSTEMS</b></div><div class="module-tags"><span>Node.js</span><span>Express</span></div><p>Connecting the pieces behind the pixels.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/machine-learning.svg" width="16" height="16" alt="" aria-hidden="true" loading="lazy">04 / Data</span><b>MEMORY</b></div><div class="module-tags"><span>MongoDB</span><span>MySQL</span></div><p>Giving ideas a place to live and grow.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/ai.svg" width="16" height="16" alt="" aria-hidden="true" loading="lazy">05 / Intelligence</span><b>LEARNING</b></div><div class="module-tags"><span>Machine learning</span><span>TensorFlow</span><span>Data science</span></div><p>Finding patterns, asking better questions, iterating.</p></div>
+          <div class="skill-module"><div class="module-head"><span><img src="./assets/icons/gaming.svg" width="16" height="16" alt="" aria-hidden="true" loading="lazy">06 / Workshop</span><b>TOOLING</b></div><div class="module-tags"><span>VS Code</span><span>Git</span><span>GitHub</span><span>Vercel</span><span>Figma</span></div><p>The everyday kit for turning sketches into shipped things.</p></div>
         </div>
       </div>
     </section>
@@ -669,20 +667,19 @@
       <div class="footer-bottom"><span>© <span id="year"></span> AYUSH SINGH / MADE WITH CURIOSITY</span><span>CHENNAI, INDIA &nbsp; · &nbsp; <a href="#top">RETURN TO ORBIT ↑</a></span></div>
     </div>
   </footer>
-  <script src="./assets/vendor/three-r128.min.js"></script>
   <script src="./assets/vendor/gsap-3.12.5.min.js"></script>
   <script src="./assets/vendor/ScrollTrigger-3.12.5.min.js"></script>
-  <script src="./assets/vendor/lenis-1.1.20.min.js"></script>
   <script>
     (() => {
       "use strict";
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const mobileEffects = window.matchMedia("(max-width: 720px), (pointer: coarse)").matches;
       const loader = document.querySelector(".loader");
       const percent = document.getElementById("loader-percent");
       const started = performance.now();
       document.getElementById("year").textContent = new Date().getFullYear();
       const tickLoader = (now) => {
-        const progress = Math.min(100, Math.round(((now - started) / 2050) * 100));
+        const progress = Math.min(100, Math.round(((now - started) / 700) * 100));
         percent.textContent = `${String(progress).padStart(2, "0")}%`;
         if (progress < 100) requestAnimationFrame(tickLoader);
         else {
@@ -690,7 +687,7 @@
             loader.classList.add("done");
             document.body.classList.remove("is-loading");
             document.querySelectorAll(".hero-title .line-inner").forEach((node) => node.style.animationPlayState = "running");
-          }, 180);
+          }, 90);
         }
       };
       document.querySelectorAll(".hero-title .line-inner").forEach((node) => node.style.animationPlayState = "paused");
@@ -699,11 +696,11 @@
       const headingSelector = "h1,h2,h3,h4,h5,h6";
       const textSelector = [
         headingSelector, "p", ".eyebrow", ".hero-kicker", ".hero-caption",
-        ".hero-roles span", ".nav-links a", ".brand > span:last-child", ".hero-index",
-        ".brand-mark", ".footer-brand", ".marquee-track span", ".loader-brand > strong",
+        ".nav-links a", ".brand > span:last-child", ".hero-index",
+        ".brand-mark", ".footer-brand", ".loader-brand > strong",
         ".scroll-cue span", ".core-label", ".core-readout", ".visual-label",
-        ".project-tags span", ".project-top > span:first-child", ".module-head > span",
-        ".module-head b", ".module-tags span", ".skill-name", ".skill-value", ".skill-note",
+        ".project-top > span:first-child", ".module-head > span",
+        ".module-head b", ".skill-name", ".skill-value", ".skill-note",
         ".meta-cell small", ".meta-cell strong", ".journey-step small", ".loader-line",
         ".loader-brand > span", ".loader-bottom > span", ".terminal-foot span",
         ".contact-footnote", ".footer-quote", ".footer-status span", ".footer-bottom > span",
@@ -715,12 +712,13 @@
       const splitTextTarget = (element) => {
         if (element.dataset.splitText === "true") return;
         const label = element.classList.contains("hero-title")
-          ? "AYUSH SINGH KNOXXZONE"
+          ? "AYUSH SINGH KNOXXZONE®"
           : element.textContent.replace(/\s+/g, " ").trim();
         if (!label) return;
 
         const visual = document.createElement("span");
         visual.className = "text-motion";
+        visual.setAttribute("aria-hidden", "true");
         while (element.firstChild) visual.appendChild(element.firstChild);
         element.appendChild(visual);
         const accessible = document.createElement("span");
@@ -761,8 +759,10 @@
         element.classList.add("text-target");
         element.dataset.splitText = "true";
         element.dataset.textMode = isCharacterText ? "character" : "word";
+        if (element.matches("a,button") && !element.hasAttribute("aria-label")) {
+          element.setAttribute("aria-label", label);
+        }
         if (element.matches(".section-title,.project-info h3")) element.classList.add("text-underline");
-        if (element.matches(".hero-title,.contact-title")) element.classList.add("glitch-target");
       };
       textTargets.forEach(splitTextTarget);
       const splitAnimatedTargets = textTargets.filter((element) => element.dataset.splitText === "true");
@@ -803,107 +803,44 @@
         document.querySelectorAll("main > section").forEach((section) => section.classList.add("scene-section"));
         const fallbackObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
-            entry.target.classList.toggle("motion-entered", entry.isIntersecting);
-            entry.target.classList.toggle("is-drawn", entry.isIntersecting);
+            if (!entry.isIntersecting) return;
+            entry.target.classList.add("motion-entered", "is-drawn");
+            fallbackObserver.unobserve(entry.target);
           });
         }, { threshold: .16, rootMargin: "0px 0px -8% 0px" });
         document.querySelectorAll(".text-target,.scene-section,.animate-image,.animate-visual,.animate-icon,.animate-card").forEach((target) => fallbackObserver.observe(target));
-        const visualMutations = new MutationObserver((records) => {
-          records.forEach((record) => record.addedNodes.forEach((node) => {
-            if (!(node instanceof Element)) return;
-            classifyVisualAssets(node);
-            if (node.matches(".animate-image,.animate-visual,.animate-icon")) fallbackObserver.observe(node);
-            node.querySelectorAll(".animate-image,.animate-visual,.animate-icon").forEach((target) => fallbackObserver.observe(target));
-          }));
-        });
-        visualMutations.observe(document.body, { childList: true, subtree: true });
       }
-      const scrambleTargets = document.querySelectorAll(".hero-kicker,.section-head .eyebrow,.hero-index");
-      const scrambleAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$%&";
-      const scrambleTimers = new WeakMap();
-      const scrambleText = (element) => {
-        if (scrambleTimers.has(element)) return;
-        const words = [...element.querySelectorAll(".word-glyph")];
-        if (!words.length) return;
-        const originals = words.map((word) => word.textContent);
-        const startedAt = performance.now();
-        const duration = reduceMotion ? 0 : 620;
-        element.classList.add("text-scramble");
-        const frame = (now) => {
-          const progress = duration ? Math.min(1, (now - startedAt) / duration) : 1;
-          words.forEach((word, index) => {
-            const original = originals[index];
-            const revealCount = Math.floor(progress * (original.length + 2));
-            word.textContent = Array.from(original, (character, charIndex) => {
-              if (character === " " || charIndex < revealCount) return character;
-              return scrambleAlphabet[Math.floor(Math.random() * scrambleAlphabet.length)];
-            }).join("");
-          });
-          if (progress < 1) {
-            scrambleTimers.set(element, requestAnimationFrame(frame));
-          } else {
-            originals.forEach((original, index) => words[index].textContent = original);
-            scrambleTimers.delete(element);
-            element.classList.remove("text-scramble");
-          }
-        };
-        scrambleTimers.set(element, requestAnimationFrame(frame));
-      };
-      const scrambleObserver = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) scrambleText(entry.target);
-        });
-      }, { threshold: .65 });
-      scrambleTargets.forEach((target) => scrambleObserver.observe(target));
-      splitAnimatedTargets.forEach((target) => {
-        const glyphs = target.querySelectorAll(".char-glyph,.word-glyph");
-        const wave = () => {
-          glyphs.forEach((glyph, index) => {
-            glyph.style.setProperty("--glyph-index", String(index % 18));
-            glyph.classList.remove("wave-active");
-          });
-          void target.offsetWidth;
-          glyphs.forEach((glyph) => glyph.classList.add("wave-active"));
-        };
-        target.addEventListener("pointerenter", wave);
-        target.addEventListener("focusin", wave);
-        target.addEventListener("animationend", (event) => {
-          if (event.target.matches(".char-glyph,.word-glyph")) event.target.classList.remove("wave-active");
-        });
-        if (target.matches(".hero-kicker,.section-head .eyebrow,.hero-index")) {
-          target.addEventListener("pointerenter", () => scrambleText(target));
-          target.addEventListener("focusin", () => scrambleText(target));
-        }
-      });
 
       const nav = document.querySelector(".nav-shell");
       const scrollProgress = document.querySelector(".progress-line");
+      let scrollFrame = 0;
       const updateScroll = () => {
+        scrollFrame = 0;
         const max = document.documentElement.scrollHeight - window.innerHeight;
         scrollProgress.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
         nav.classList.toggle("scrolled", window.scrollY > 24);
       };
-      window.addEventListener("scroll", updateScroll, { passive: true });
+      const scheduleScrollUpdate = () => {
+        if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScroll);
+      };
+      window.addEventListener("scroll", scheduleScrollUpdate, { passive: true });
+      window.addEventListener("resize", scheduleScrollUpdate, { passive: true });
       updateScroll();
 
       const terminalTimers = new WeakMap();
       const revealObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          entry.target.classList.toggle("in-view", entry.isIntersecting);
-          if (entry.target.classList.contains("skills-panel")) entry.target.classList.toggle("in", entry.isIntersecting);
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("in-view");
+          if (entry.target.classList.contains("skills-panel")) entry.target.classList.add("in");
           if (entry.target.id === "terminal-body") {
-            const previousTimers = terminalTimers.get(entry.target) || [];
-            previousTimers.forEach(window.clearTimeout);
             const timers = [];
             entry.target.querySelectorAll("p").forEach((line, index) => {
-              if (!entry.isIntersecting) {
-                line.classList.remove("visible");
-                return;
-              }
               timers.push(window.setTimeout(() => line.classList.add("visible"), reduceMotion ? 0 : index * 260));
             });
             terminalTimers.set(entry.target, timers);
           }
+          revealObserver.unobserve(entry.target);
         });
       }, { threshold: .14, rootMargin: "0px 0px -5% 0px" });
       document.querySelectorAll("[data-reveal],.skills-panel,#terminal-body").forEach((element) => revealObserver.observe(element));
@@ -916,6 +853,7 @@
         future: { color: "#ff5c91", rgb: "255,92,145", secondary: "#a979ff" }
       };
       const storyLinks = [...document.querySelectorAll(".story-index a")];
+      const mainLinks = [...document.querySelectorAll(".nav-links a")];
       const worldObserver = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
@@ -925,7 +863,16 @@
           document.documentElement.style.setProperty("--accent-rgb", world.rgb);
           document.documentElement.style.setProperty("--accent-secondary", world.secondary);
           document.body.dataset.world = entry.target.dataset.world;
-          storyLinks.forEach((link) => link.classList.toggle("active", link.hash === `#${entry.target.id}` || (entry.target.id === "hero" && link.hash === "#top")));
+          storyLinks.forEach((link) => {
+            const active = link.hash === `#${entry.target.id}` || (entry.target.id === "hero" && link.hash === "#top");
+            link.classList.toggle("active", active);
+            if (active) link.setAttribute("aria-current", "location");
+            else link.removeAttribute("aria-current");
+          });
+          mainLinks.forEach((link) => {
+            if (link.hash === `#${entry.target.id}`) link.setAttribute("aria-current", "location");
+            else link.removeAttribute("aria-current");
+          });
         });
       }, { threshold: 0, rootMargin: "-42% 0px -48% 0px" });
       document.querySelectorAll("[data-world]").forEach((section) => worldObserver.observe(section));
@@ -933,15 +880,15 @@
       if (window.gsap && window.ScrollTrigger) {
         gsap.registerPlugin(ScrollTrigger);
         const isMobile = window.matchMedia("(max-width: 720px), (pointer: coarse)").matches;
-        const toggleActions = "play reverse play reverse";
-        const entranceDuration = reduceMotion ? .24 : isMobile ? .48 : .82;
+        const toggleActions = "play none none none";
+        const entranceDuration = reduceMotion ? .24 : isMobile ? .4 : .58;
         const entranceEase = reduceMotion ? "power1.out" : "power3.out";
         const createViewportAnimation = ({ elements, from, to, start = "top 88%", end = "bottom 12%", duration = entranceDuration, stagger = 0, ease = entranceEase }) => {
           elements.forEach((element, index) => {
             gsap.fromTo(element, from(index, element), {
               ...to(index, element),
               duration,
-              delay: (reduceMotion ? 0 : element.closest(".hero") ? 2.15 : 0) + (reduceMotion ? 0 : Math.min(index % 4, 3) * .045),
+              delay: (reduceMotion ? 0 : element.closest(".hero") ? .18 : 0) + (reduceMotion ? 0 : Math.min(index % 4, 3) * .035),
               stagger: reduceMotion ? Math.min(stagger, .004) : isMobile ? Math.min(stagger, .008) : stagger,
               ease,
               overwrite: "auto",
@@ -961,19 +908,11 @@
         scenes.forEach((scene) => {
           scene.classList.add("scene-section");
           gsap.fromTo(scene, {
-            scale: reduceMotion ? .998 : isMobile ? .992 : .985,
-            y: reduceMotion ? 2 : isMobile ? 10 : 22,
-            rotateX: reduceMotion || isMobile ? 0 : 1,
-            autoAlpha: reduceMotion ? .92 : .82,
-            filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)",
-            transformPerspective: 1200,
-            transformOrigin: "50% 50%"
+            y: reduceMotion ? 1 : isMobile ? 7 : 12,
+            autoAlpha: reduceMotion ? .94 : .86
           }, {
-            scale: 1,
             y: 0,
-            rotateX: 0,
             autoAlpha: 1,
-            filter: "blur(0px)",
             duration: entranceDuration,
             ease: entranceEase,
             overwrite: "auto",
@@ -991,8 +930,8 @@
         const textElements = gsap.utils.toArray(".animate-text");
         createViewportAnimation({
           elements: textElements,
-          from: () => ({ autoAlpha: 0, y: reduceMotion ? 2 : isMobile ? 12 : 24, z: reduceMotion || isMobile ? 0 : -36, rotateX: reduceMotion || isMobile ? 0 : -10, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(5px)" }),
-          to: () => ({ autoAlpha: 1, y: 0, z: 0, rotateX: 0, filter: "blur(0px)" }),
+          from: () => ({ autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 7 : 12 }),
+          to: () => ({ autoAlpha: 1, y: 0 }),
           start: "top 91%",
           end: "bottom 10%",
           stagger: .012
@@ -1004,26 +943,13 @@
           if (!glyphs.length) return;
           gsap.fromTo(glyphs, {
             autoAlpha: 0,
-            x: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-34, 34),
-            y: () => reduceMotion ? 2 : isMobile ? 13 : gsap.utils.random(20, 46),
-            z: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-58, 58),
-            scale: () => reduceMotion || isMobile ? .98 : gsap.utils.random(.66, 1.25),
-            rotateX: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-38, 38),
-            rotateY: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-18, 18),
-            filter: reduceMotion || isMobile ? "blur(0px)" : "blur(7px)",
-            transformOrigin: "50% 100%"
+            y: reduceMotion ? 1 : isMobile ? 6 : 12
           }, {
             autoAlpha: 1,
-            x: 0,
             y: 0,
-            z: 0,
-            scale: 1,
-            rotateX: 0,
-            rotateY: 0,
-            filter: "blur(0px)",
             duration: entranceDuration,
-            delay: !reduceMotion && heading.closest(".hero") ? 2.15 : 0,
-            stagger: { each: reduceMotion ? .002 : isMobile ? .006 : .014, from: "random" },
+            delay: !reduceMotion && heading.closest(".hero") ? .18 : 0,
+            stagger: { each: reduceMotion ? .002 : isMobile ? .004 : .008 },
             ease: entranceEase,
             overwrite: "auto",
             scrollTrigger: {
@@ -1042,19 +968,13 @@
           if (!glyphs.length) return;
           gsap.fromTo(glyphs, {
             autoAlpha: 0,
-            y: () => reduceMotion ? 2 : isMobile ? 10 : gsap.utils.random(12, 24),
-            z: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-24, 18),
-            rotateX: () => reduceMotion || isMobile ? 0 : gsap.utils.random(-12, 12),
-            filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)"
+            y: reduceMotion ? 1 : isMobile ? 5 : 9
           }, {
             autoAlpha: 1,
             y: 0,
-            z: 0,
-            rotateX: 0,
-            filter: "blur(0px)",
             duration: entranceDuration,
-            delay: !reduceMotion && target.closest(".hero") ? 2.15 : 0,
-            stagger: { each: reduceMotion ? .002 : isMobile ? .004 : target.matches("p") ? .012 : .008, from: target.matches(".terminal-body p") ? "start" : "random" },
+            delay: !reduceMotion && target.closest(".hero") ? .18 : 0,
+            stagger: { each: reduceMotion ? .002 : isMobile ? .003 : target.matches("p") ? .008 : .005, from: "start" },
             ease: entranceEase,
             overwrite: "auto",
             scrollTrigger: {
@@ -1097,8 +1017,8 @@
           const visualGroups = [
             {
               elements: groups.image,
-              from: () => ({ autoAlpha: 0, y: reduceMotion ? 2 : isMobile ? 12 : 24, scale: reduceMotion || isMobile ? .99 : .95, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(5px)" }),
-              to: () => ({ autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)" }),
+              from: () => ({ autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 7 : 12, scale: .99 }),
+              to: () => ({ autoAlpha: 1, y: 0, scale: 1 }),
               start: "top 93%",
               end: "bottom 7%",
               stagger: .012
@@ -1106,23 +1026,23 @@
             {
               elements: groups.visual,
               from: (_, element) => element.matches(".core-halo")
-                ? { autoAlpha: 0, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)" }
+                ? { autoAlpha: 0 }
                 : element.matches(".journey-orbit")
-                  ? { autoAlpha: 0, scale: reduceMotion || isMobile ? .99 : .95, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)" }
-                  : { autoAlpha: 0, y: reduceMotion ? 2 : isMobile ? 12 : 22, scale: reduceMotion || isMobile ? .99 : .95, rotateX: reduceMotion || isMobile ? 0 : 2, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(4px)" },
+                  ? { autoAlpha: 0, scale: .99 }
+                  : { autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 7 : 11, scale: .99 },
               to: (_, element) => element.matches(".core-halo")
-                ? { autoAlpha: 1, filter: "blur(0px)" }
+                ? { autoAlpha: 1 }
                 : element.matches(".journey-orbit")
-                  ? { autoAlpha: 1, scale: 1, filter: "blur(0px)" }
-                  : { autoAlpha: 1, y: 0, scale: 1, rotateX: 0, filter: "blur(0px)" },
+                  ? { autoAlpha: 1, scale: 1 }
+                  : { autoAlpha: 1, y: 0, scale: 1 },
               start: "top 93%",
               end: "bottom 7%",
               stagger: .012
             },
             {
               elements: groups.icon,
-              from: () => ({ autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 6 : 10, scale: reduceMotion || isMobile ? .98 : .78, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(3px)" }),
-              to: () => ({ autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)" }),
+              from: () => ({ autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 4 : 8, scale: .98 }),
+              to: () => ({ autoAlpha: 1, y: 0, scale: 1 }),
               start: "top 96%",
               end: "bottom 4%",
               stagger: .008
@@ -1134,22 +1054,11 @@
           return registeredCount;
         };
         registerVisualReveals();
-        const visualMutations = new MutationObserver((records) => {
-          let addedVisual = false;
-          records.forEach((record) => record.addedNodes.forEach((node) => {
-            if (!(node instanceof Element)) return;
-            classifyVisualAssets(node);
-            const count = registerVisualReveals(node);
-            if (count) addedVisual = true;
-          }));
-          if (addedVisual) ScrollTrigger.refresh();
-        });
-        visualMutations.observe(document.body, { childList: true, subtree: true });
         const cardElements = gsap.utils.toArray(".animate-card");
         createViewportAnimation({
           elements: cardElements,
-          from: (index) => ({ autoAlpha: 0, x: reduceMotion || isMobile ? 0 : (index % 2 ? 30 : -30), y: reduceMotion ? 2 : isMobile ? 12 : 26, z: reduceMotion || isMobile ? 0 : -38, rotateY: reduceMotion || isMobile ? 0 : (index % 2 ? -5 : 5), scale: reduceMotion || isMobile ? .99 : .95, filter: reduceMotion || isMobile ? "blur(0px)" : "blur(5px)" }),
-          to: () => ({ autoAlpha: 1, x: 0, y: 0, z: 0, rotateY: 0, scale: 1, filter: "blur(0px)" }),
+          from: () => ({ autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 7 : 12, scale: .99 }),
+          to: () => ({ autoAlpha: 1, y: 0, scale: 1 }),
           start: "top 91%",
           end: "bottom 9%",
           duration: entranceDuration,
@@ -1168,30 +1077,13 @@
             onLeave: () => heading.classList.remove("is-glowing", "is-drawn")
           });
         });
-        const glitchTargets = [...document.querySelectorAll(".hero-title,.section-title,.project-info h3,.contact-title")];
-        const scheduleGlitch = () => {
-          window.setTimeout(() => {
-            if (!document.hidden) {
-              const visibleTargets = glitchTargets.filter((target) => {
-                const bounds = target.getBoundingClientRect();
-                return bounds.bottom > 0 && bounds.top < window.innerHeight;
-              });
-              if (visibleTargets.length) {
-                const target = visibleTargets[Math.floor(Math.random() * visibleTargets.length)];
-                target.classList.add("glitch-active");
-                window.setTimeout(() => target.classList.remove("glitch-active"), 760);
-              }
-            }
-            scheduleGlitch();
-          }, gsap.utils.random(4200, 7600));
-        };
-        if (!reduceMotion) scheduleGlitch();
-
         if (reduceMotion) {
           const verticalJourney = window.matchMedia("(max-width: 720px)").matches;
-          gsap.set(".journey-line-fill", verticalJourney ? { width: "100%", height: "0%" } : { width: "0%", height: "100%" });
+          gsap.set(".journey-line-fill", verticalJourney
+            ? { scaleX: 1, scaleY: 0, transformOrigin: "center top" }
+            : { scaleX: 0, scaleY: 1, transformOrigin: "left center" });
           gsap.to(".journey-line-fill", verticalJourney ? {
-            height: "100%",
+            scaleY: 1,
             duration: .35,
             ease: "power1.out",
             scrollTrigger: {
@@ -1201,7 +1093,7 @@
               toggleActions
             }
           } : {
-            width: "100%",
+            scaleX: 1,
             duration: .35,
             ease: "power1.out",
             scrollTrigger: {
@@ -1213,73 +1105,30 @@
           });
         } else {
         gsap.matchMedia().add("(min-width: 721px)", () => {
-          gsap.fromTo(".journey-line-fill", { width: "0%" }, {
-            width: "100%",
+          gsap.fromTo(".journey-line-fill", { scaleX: 0 }, {
+            scaleX: 1,
             ease: "none",
             scrollTrigger: { trigger: ".journey-track", start: "top 72%", end: "bottom 48%", scrub: .7 }
           });
         });
         gsap.matchMedia().add("(max-width: 720px)", () => {
-          gsap.fromTo(".journey-line-fill", { height: "0%" }, {
-            height: "100%",
+          gsap.fromTo(".journey-line-fill", { scaleY: 0 }, {
+            scaleY: 1,
             ease: "none",
             scrollTrigger: { trigger: ".journey-track", start: "top 72%", end: "bottom 48%", scrub: .7 }
           });
         });
-        gsap.utils.toArray(".journey-node").forEach((node, index) => {
-          gsap.fromTo(node, { scale: .45, opacity: .25, boxShadow: "0 0 0 0 rgba(99,120,255,0)" }, {
+        gsap.utils.toArray(".journey-node").forEach((node) => {
+          gsap.fromTo(node, { scale: .82, opacity: .5 }, {
             scale: 1,
             opacity: 1,
-            boxShadow: "0 0 0 9px rgba(99,120,255,.1), 0 0 25px rgba(99,220,255,.32)",
-            ease: "back.out(2)",
+            ease: "power1.out",
             scrollTrigger: { trigger: node.closest(".journey-step"), start: "top 78%", end: "top 52%", scrub: .6 }
           });
         });
         }
 
-        const parallaxLayers = [
-          [".hero-grid", -18],
-          ["#universe", -12],
-          [".journey-orbit", 23]
-        ];
-        (reduceMotion || isMobile ? [] : parallaxLayers).forEach(([selector, distance]) => {
-          gsap.utils.toArray(selector).forEach((layer) => {
-            gsap.to(layer, {
-              y: distance,
-              ease: "none",
-              scrollTrigger: {
-                trigger: layer.closest("section") || layer,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1.1
-              }
-            });
-          });
-        });
-        if (!reduceMotion && !isMobile) gsap.to(".hero-visual", {
-          y: 125,
-          opacity: .2,
-          ease: "none",
-          scrollTrigger: { trigger: ".hero", start: "top top", end: "bottom top", scrub: 1 }
-        });
-        if (!reduceMotion) gsap.matchMedia().add("(min-width: 1000px)", () => {
-          ScrollTrigger.create({
-            trigger: "#system .system-layout",
-            start: "top center",
-            end: "+=220",
-            pin: true,
-            pinSpacing: true,
-            anticipatePin: 1
-          });
-        });
         ScrollTrigger.refresh();
-      }
-
-      if (window.Lenis && window.gsap && window.ScrollTrigger && !reduceMotion) {
-        const lenis = new Lenis({ duration: 1.1, smoothWheel: true, wheelMultiplier: .88, touchMultiplier: 1 });
-        lenis.on("scroll", ScrollTrigger.update);
-        gsap.ticker.add((time) => lenis.raf(time * 1000));
-        gsap.ticker.lagSmoothing(0);
       }
 
       const menuButton = document.querySelector(".menu-toggle");
@@ -1294,45 +1143,23 @@
         menuButton.setAttribute("aria-expanded", "false");
         menuButton.setAttribute("aria-label", "Open navigation");
       }));
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape" || !menu.classList.contains("open")) return;
+        menu.classList.remove("open");
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.setAttribute("aria-label", "Open navigation");
+        menuButton.focus();
+      });
 
       const cursor = document.querySelector(".cursor");
       const cursorRing = document.querySelector(".cursor-ring");
       if (window.matchMedia("(pointer: fine)").matches) {
-        let ringX = window.innerWidth / 2;
-        let ringY = window.innerHeight / 2;
-        let pointerTargetX = ringX;
-        let pointerTargetY = ringY;
-        const trail = Array.from({ length: 5 }, (_, index) => {
-          const dot = document.createElement("i");
-          dot.className = "cursor-trail";
-          dot.setAttribute("aria-hidden", "true");
-          dot.style.setProperty("--trail-index", String(index));
-          document.body.appendChild(dot);
-          return { element: dot, x: ringX, y: ringY };
-        });
         window.addEventListener("pointermove", (event) => {
           cursor.style.left = `${event.clientX}px`;
           cursor.style.top = `${event.clientY}px`;
-          pointerTargetX = event.clientX;
-          pointerTargetY = event.clientY;
-          document.documentElement.style.setProperty("--glow-x", `${event.clientX}px`);
-          document.documentElement.style.setProperty("--glow-y", `${event.clientY}px`);
+          cursorRing.style.left = `${event.clientX}px`;
+          cursorRing.style.top = `${event.clientY}px`;
         }, { passive: true });
-        const followCursor = () => {
-          ringX += (pointerTargetX - ringX) * .14;
-          ringY += (pointerTargetY - ringY) * .14;
-          cursorRing.style.left = `${ringX}px`;
-          cursorRing.style.top = `${ringY}px`;
-          trail.forEach((point, index) => {
-            const previous = index === 0 ? { x: pointerTargetX, y: pointerTargetY } : trail[index - 1];
-            point.x += (previous.x - point.x) * (.21 - index * .025);
-            point.y += (previous.y - point.y) * (.21 - index * .025);
-            point.element.style.left = `${point.x}px`;
-            point.element.style.top = `${point.y}px`;
-          });
-          requestAnimationFrame(followCursor);
-        };
-        requestAnimationFrame(followCursor);
         document.querySelectorAll("a,button,.skill-module,.project-card").forEach((target) => {
           target.addEventListener("pointerenter", () => {
             cursor.classList.add("is-hover");
@@ -1362,7 +1189,7 @@
             const y = (event.clientY - box.top) / box.height;
             card.style.setProperty("--mx", `${x * 100}%`);
             card.style.setProperty("--my", `${y * 100}%`);
-            card.style.transform = `perspective(1000px) rotateX(${(0.5 - y) * 4}deg) rotateY(${(x - 0.5) * 5}deg) translateY(-3px)`;
+            card.style.transform = `perspective(1000px) rotateX(${(0.5 - y) * 2}deg) rotateY(${(x - 0.5) * 2}deg) translateY(-3px)`;
           });
           card.addEventListener("pointerleave", () => card.style.transform = "");
         });
@@ -1375,20 +1202,31 @@
       let starHeight = 0;
       let pointerX = 0;
       let pointerY = 0;
+      let starFrame = 0;
+      let lastStarFrame = 0;
+      let heroInView = false;
+      const animateStars = !reduceMotion && !mobileEffects;
       const resizeStars = () => {
-        const ratio = Math.min(window.devicePixelRatio || 1, 1.6);
+        const ratio = Math.min(window.devicePixelRatio || 1, mobileEffects ? 1 : 1.4);
         starWidth = starCanvas.clientWidth;
         starHeight = starCanvas.clientHeight;
         starCanvas.width = Math.round(starWidth * ratio);
         starCanvas.height = Math.round(starHeight * ratio);
         starContext.setTransform(ratio, 0, 0, ratio, 0, 0);
-        stars = Array.from({ length: Math.min(145, Math.floor(starWidth * starHeight / 9000)) }, () => ({
+        stars = Array.from({ length: Math.min(mobileEffects ? 48 : 110, Math.floor(starWidth * starHeight / (mobileEffects ? 18000 : 11000))) }, () => ({
           x: Math.random() * starWidth, y: Math.random() * starHeight,
           size: Math.random() * 1.25 + .25, alpha: Math.random() * .52 + .12,
           phase: Math.random() * Math.PI * 2, speed: Math.random() * .004 + .001
         }));
+        if (!animateStars) drawStars(0);
       };
       const drawStars = (time) => {
+        starFrame = 0;
+        if (animateStars && heroInView && time - lastStarFrame < 40) {
+          starFrame = requestAnimationFrame(drawStars);
+          return;
+        }
+        lastStarFrame = time;
         starContext.clearRect(0, 0, starWidth, starHeight);
         const driftX = pointerX * 13;
         const driftY = pointerY * 9;
@@ -1399,17 +1237,42 @@
           starContext.fillStyle = `rgba(205,237,197,${alpha})`;
           starContext.fill();
         });
-        if (!reduceMotion) requestAnimationFrame(drawStars);
+        if (animateStars && heroInView && document.visibilityState === "visible") {
+          if (time - lastStarFrame >= 40) lastStarFrame = time;
+          starFrame = requestAnimationFrame(drawStars);
+        }
+      };
+      const syncStarLoop = () => {
+        if (animateStars && heroInView && document.visibilityState === "visible") {
+          if (!starFrame) starFrame = requestAnimationFrame(drawStars);
+        } else if (starFrame) {
+          cancelAnimationFrame(starFrame);
+          starFrame = 0;
+        }
       };
       resizeStars();
-      if (!reduceMotion && window.matchMedia("(pointer: fine)").matches) {
+      if (animateStars && window.matchMedia("(pointer: fine)").matches) {
         window.addEventListener("pointermove", (event) => {
           pointerX = (event.clientX / window.innerWidth - .5) * 2;
           pointerY = (event.clientY / window.innerHeight - .5) * 2;
         }, { passive: true });
       }
-      requestAnimationFrame(drawStars);
-      window.addEventListener("resize", resizeStars, { passive: true });
+      if (animateStars) {
+        const starObserver = new IntersectionObserver(([entry]) => {
+          heroInView = entry.isIntersecting;
+          syncStarLoop();
+        });
+        starObserver.observe(document.querySelector(".hero"));
+      }
+      document.addEventListener("visibilitychange", syncStarLoop);
+      let starResizeFrame = 0;
+      window.addEventListener("resize", () => {
+        if (starResizeFrame) return;
+        starResizeFrame = requestAnimationFrame(() => {
+          starResizeFrame = 0;
+          resizeStars();
+        });
+      }, { passive: true });
 
       const matrixCanvas = document.getElementById("matrix-rain");
       const matrixContext = matrixCanvas && matrixCanvas.getContext("2d");
@@ -1419,8 +1282,11 @@
         let matrixWidth = 0;
         let matrixHeight = 0;
         let matrixFrame = 0;
+        let matrixVisible = false;
+        let lastMatrixFrame = 0;
+        const animateMatrix = !reduceMotion && !mobileEffects;
         const resizeMatrix = () => {
-          const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+          const ratio = Math.min(window.devicePixelRatio || 1, mobileEffects ? 1 : 1.25);
           matrixWidth = matrixCanvas.clientWidth;
           matrixHeight = matrixCanvas.clientHeight;
           matrixCanvas.width = Math.round(matrixWidth * ratio);
@@ -1429,7 +1295,14 @@
           const count = Math.ceil(matrixWidth / 14);
           columns = Array.from({ length: count }, () => Math.random() * -45);
         };
-        const drawMatrix = () => {
+        const drawMatrix = (time) => {
+          matrixFrame = 0;
+          if (!animateMatrix || !matrixVisible || document.visibilityState !== "visible") return;
+          if (time - lastMatrixFrame < 50) {
+            matrixFrame = requestAnimationFrame(drawMatrix);
+            return;
+          }
+          lastMatrixFrame = time;
           matrixContext.fillStyle = "rgba(3,13,16,.15)";
           matrixContext.fillRect(0, 0, matrixWidth, matrixHeight);
           matrixContext.fillStyle = "#62f5ad";
@@ -1439,26 +1312,51 @@
             matrixContext.fillText(glyph, index * 14, y * 14);
             columns[index] = y * 14 > matrixHeight && Math.random() > .975 ? -Math.random() * 25 : y + .42;
           });
-          if (!reduceMotion) matrixFrame = requestAnimationFrame(drawMatrix);
+          matrixFrame = requestAnimationFrame(drawMatrix);
         };
-        resizeMatrix();
-        if (!reduceMotion) matrixFrame = requestAnimationFrame(drawMatrix);
-        else {
-          matrixContext.fillStyle = "rgba(3,13,16,.18)";
-          matrixContext.fillRect(0, 0, matrixWidth, matrixHeight);
+        const drawMatrixStatic = () => {
+          matrixContext.clearRect(0, 0, matrixWidth, matrixHeight);
           matrixContext.fillStyle = "#62f5ad";
           matrixContext.font = "10px monospace";
           matrixContext.fillText("010101   AI_MODEL   PYTHON   REACT   SYSTEM_ONLINE", 12, 28);
+        };
+        const syncMatrixLoop = () => {
+          if (animateMatrix && matrixVisible && document.visibilityState === "visible") {
+            if (!matrixFrame) matrixFrame = requestAnimationFrame(drawMatrix);
+          } else if (matrixFrame) {
+            cancelAnimationFrame(matrixFrame);
+            matrixFrame = 0;
+          }
+        };
+        resizeMatrix();
+        if (animateMatrix) {
+          const matrixObserver = new IntersectionObserver(([entry]) => {
+            matrixVisible = entry.isIntersecting;
+            syncMatrixLoop();
+          });
+          matrixObserver.observe(matrixCanvas);
+          document.addEventListener("visibilitychange", syncMatrixLoop);
+        } else {
+          drawMatrixStatic();
         }
-        window.addEventListener("resize", resizeMatrix, { passive: true });
+        let matrixResizeFrame = 0;
+        window.addEventListener("resize", () => {
+          if (matrixResizeFrame) return;
+          matrixResizeFrame = requestAnimationFrame(() => {
+            matrixResizeFrame = 0;
+            resizeMatrix();
+            if (!animateMatrix) drawMatrixStatic();
+          });
+        }, { passive: true });
       }
 
       const coreCanvas = document.getElementById("core3d");
+      const initializeCore = () => {
       if (window.THREE && coreCanvas) {
         const mountCore = (vertexShader, fragmentShader) => {
           try {
           const renderer = new THREE.WebGLRenderer({ canvas: coreCanvas, alpha: true, antialias: true });
-          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+          renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.25));
           renderer.setSize(coreCanvas.clientWidth, coreCanvas.clientHeight, false);
           const scene = new THREE.Scene();
           const camera = new THREE.PerspectiveCamera(42, 1, .1, 100);
@@ -1484,7 +1382,7 @@
           core.add(inner);
           const pointsGeometry = new THREE.BufferGeometry();
           const positions = [];
-          for (let i = 0; i < 620; i++) {
+          for (let i = 0; i < 360; i++) {
             const radius = 1.13 + Math.random() * .52;
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
@@ -1518,23 +1416,54 @@
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
           };
-          window.addEventListener("resize", resizeCore, { passive: true });
-          const renderCore = (time) => {
+          let coreResizeFrame = 0;
+          window.addEventListener("resize", () => {
+            if (coreResizeFrame) return;
+            coreResizeFrame = requestAnimationFrame(() => {
+              coreResizeFrame = 0;
+              resizeCore();
+            });
+          }, { passive: true });
+          let coreFrame = 0;
+          let coreVisible = false;
+          let lastCoreFrame = 0;
+          const drawCore = (time) => {
+            coreFrame = 0;
+            if (!coreVisible || document.visibilityState !== "visible") return;
+            if (!reduceMotion && time - lastCoreFrame < 33) {
+              coreFrame = requestAnimationFrame(drawCore);
+              return;
+            }
+            lastCoreFrame = time;
             if (!reduceMotion) {
               core.rotation.y += .0019;
               core.rotation.x += .0006;
+              inner.rotation.y -= .0024;
+              orbit.rotation.z = Math.sin(time * .0003) * .13;
+              shell.material.uniforms.uTime.value = time * .001;
             }
             core.rotation.y += (targetY - core.rotation.y) * .018;
             core.rotation.x += (targetX - core.rotation.x) * .018;
-            inner.rotation.y -= .0024;
             points.rotation.y = -core.rotation.y * .65;
-            orbit.rotation.z = Math.sin(time * .0003) * .13;
-            shell.material.uniforms.uTime.value = time * .001;
             renderer.render(scene, camera);
-            requestAnimationFrame(renderCore);
+            if (!reduceMotion) coreFrame = requestAnimationFrame(drawCore);
+          };
+          const syncCoreLoop = () => {
+            if (coreVisible && document.visibilityState === "visible") {
+              if (reduceMotion) drawCore(0);
+              else if (!coreFrame) coreFrame = requestAnimationFrame(drawCore);
+            } else if (coreFrame) {
+              cancelAnimationFrame(coreFrame);
+              coreFrame = 0;
+            }
           };
           resizeCore();
-          requestAnimationFrame(renderCore);
+          const coreObserver = new IntersectionObserver(([entry]) => {
+            coreVisible = entry.isIntersecting;
+            syncCoreLoop();
+          });
+          coreObserver.observe(document.querySelector(".hero"));
+          document.addEventListener("visibilitychange", syncCoreLoop);
           } catch (error) {
             console.warn("3D core could not initialize; decorative CSS visualization remains active.", error);
           }
@@ -1579,6 +1508,15 @@ void main() {
         }
       } else if (coreCanvas) {
         console.error("Three.js is unavailable; verify the local vendor script is present.");
+      }
+      };
+      if (!mobileEffects) {
+        const threeScript = document.createElement("script");
+        threeScript.src = "./assets/vendor/three-r128.min.js";
+        threeScript.async = true;
+        threeScript.addEventListener("load", initializeCore, { once: true });
+        threeScript.addEventListener("error", () => console.error("Three.js could not load; the CSS core visualization remains available."), { once: true });
+        document.head.append(threeScript);
       }
     })();
   </script>

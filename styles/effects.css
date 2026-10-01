@@ -1,29 +1,6 @@
-.cursor-trail {
-  position: fixed;
-  z-index: 98;
-  top: 0;
-  left: 0;
-  width: calc(5px - var(--trail-index) * .65px);
-  height: calc(5px - var(--trail-index) * .65px);
-  border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 12px rgba(var(--accent-rgb), .7);
-  opacity: calc(.48 - var(--trail-index) * .075);
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-}
-
-.project-card,
-.skill-module,
-.about-visual,
-.terminal,
-.contact-box {
-  transform-style: preserve-3d;
-}
-
 .project-card,
 .skill-module {
-  will-change: transform;
+  will-change: auto;
   backface-visibility: hidden;
 }
 
@@ -32,42 +9,34 @@
 .about-visual,
 .terminal,
 .contact-box {
-  transform-style: preserve-3d;
-}
-
-.project-card .project-info,
-.project-card .project-top,
-.project-card .project-art {
-  transform: translateZ(18px);
+  transform-style: flat;
 }
 
 .project-card {
   transition:
-    border-color var(--motion-medium) ease,
-    box-shadow var(--motion-medium) ease,
-    background-position var(--motion-slow) ease;
+    transform 220ms var(--motion-ease),
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.project-card:hover {
+  box-shadow: none;
 }
 
 .skill-module {
   transition:
-    background var(--motion-medium) ease,
-    border-color var(--motion-medium) ease,
-    box-shadow var(--motion-medium) ease;
+    transform 220ms var(--motion-ease),
+    background-color 220ms ease,
+    border-color 220ms ease;
+}
+
+.project-card:hover,
+.skill-module:hover {
+  transform: translateY(-3px);
 }
 
 .noise {
-  background: url("../assets/textures/noise.svg") repeat;
-  background-size: 180px 180px;
-  mix-blend-mode: screen;
-}
-
-.noise::after {
-  position: absolute;
-  inset: 0;
-  background: url("../assets/textures/scanlines.svg") repeat;
-  background-size: 1600px 1000px;
-  content: "";
-  opacity: .24;
+  display: none;
 }
 
 .hero-grid {
@@ -89,7 +58,36 @@
   content: "";
   opacity: .7;
   pointer-events: none;
-  animation: particle-aura 6s ease-in-out infinite alternate;
+  animation: particle-aura 10s ease-in-out infinite alternate;
+}
+
+.nav-shell.scrolled { backdrop-filter: none; }
+.nav-links a { position: relative; }
+.nav-links a::after {
+  position: absolute;
+  right: 0;
+  bottom: -9px;
+  left: 0;
+  height: 1px;
+  background: var(--accent);
+  content: "";
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 220ms var(--motion-ease);
+}
+.nav-links a[aria-current="location"] { color: var(--accent); }
+.nav-links a[aria-current="location"]::after,
+.nav-links a:hover::after { transform: scaleX(1); }
+.story-index a { color: #8894a9; }
+
+@media (max-width: 1000px) {
+  .nav-links { gap: clamp(12px, 2vw, 20px); font-size: 9px; }
+  .nav-status { font-size: 8px; }
+}
+
+@media (max-width: 720px) {
+  .hero { min-height: max(700px, 100svh); }
+  .nav-links a::after { display: none; }
 }
 
 .core-halo {
@@ -157,14 +155,38 @@
 }
 
 @media (pointer: coarse) {
-  .cursor-trail {
-    display: none;
-  }
+  .noise { display: none; }
+}
+
+@media (max-width: 720px), (pointer: coarse) {
+  #matrix-rain { display: none; }
+
+  .hero-visual::before,
+  .core-halo,
+  .map-contour,
+  .journey-orbit::before,
+  .journey-orbit::after,
+  .status-dot,
+  .marquee-track,
+  .scroll-cue i,
+  .scan-ring::before,
+  .scan-ring::after,
+  .scan-core,
+  .orbit-path,
+  .map-pin { animation: none; }
+
+  .hero-visual { opacity: .28; }
+  .noise { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .cursor-trail {
-    display: none;
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
   }
 
   .project-card,

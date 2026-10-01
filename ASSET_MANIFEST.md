@@ -44,10 +44,10 @@ All first-party visual assets are procedural SVGs or CSS/canvas/Three.js graphic
 
 | Filename | Location | Type / version | Purpose | Used by | Optimization |
 |---|---|---|---|---|---|
-| `three-r128.min.js` | `assets/vendor/three-r128.min.js` | Minified JavaScript, Three.js r128 | Procedural interactive AI-core scene and particle systems | `index.html` local script | Minified production build; no model files |
+| `three-r128.min.js` | `assets/vendor/three-r128.min.js` | Minified JavaScript, Three.js r128 | Procedural interactive AI-core scene and particle systems | Loaded asynchronously by `index.html` on fine-pointer, wide layouts only | Minified production build; no model files |
 | `gsap-3.12.5.min.js` | `assets/vendor/gsap-3.12.5.min.js` | Minified JavaScript, GSAP 3.12.5 | Motion timelines and scroll animation | `index.html` local script | Minified production build |
 | `ScrollTrigger-3.12.5.min.js` | `assets/vendor/ScrollTrigger-3.12.5.min.js` | Minified JavaScript, ScrollTrigger 3.12.5 | Scroll-driven section and text choreography | `index.html` local script, registered with GSAP | Minified production build |
-| `lenis-1.1.20.min.js` | `assets/vendor/lenis-1.1.20.min.js` | Minified JavaScript, Lenis 1.1.20 | Smooth scroll integration | `index.html` local script | Minified production build |
+| `lenis-1.1.20.min.js` | `assets/vendor/lenis-1.1.20.min.js` | Minified JavaScript, Lenis 1.1.20 | Previously used smooth-scroll integration; retained as a vendored asset | Not loaded by `index.html` | Minified production build; no runtime request |
 
 Third-party runtime notices and applicable license links are recorded in [`assets/vendor/README.md`](assets/vendor/README.md).
 

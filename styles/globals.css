@@ -27,7 +27,7 @@ button:focus-visible {
 }
 
 .text-motion {
-  display: contents;
+  display: inline;
 }
 
 .text-space {
