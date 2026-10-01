@@ -13,14 +13,28 @@
 }
 
 .project-card {
-  transition:
-    transform 220ms var(--motion-ease),
-    border-color 220ms ease,
-    background-color 220ms ease;
+  transform-style: preserve-3d;
 }
 
-.project-card:hover {
-  box-shadow: none;
+.project-card {
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.project-card::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  background: radial-gradient(260px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(var(--accent-rgb), .075), transparent 74%);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.project-card:hover::before {
+  opacity: 1;
 }
 
 .skill-module {
@@ -30,7 +44,6 @@
     border-color 220ms ease;
 }
 
-.project-card:hover,
 .skill-module:hover {
   transform: translateY(-3px);
 }
@@ -79,6 +92,100 @@
 .nav-links a[aria-current="location"]::after,
 .nav-links a:hover::after { transform: scaleX(1); }
 .story-index a { color: #8894a9; }
+
+.ambient-spotlight {
+  position: fixed;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  opacity: .72;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+main,
+.marquee,
+.footer {
+  position: relative;
+  z-index: 1;
+}
+
+body.has-custom-cursor,
+body.has-custom-cursor a,
+body.has-custom-cursor button,
+body.has-custom-cursor [role="button"] {
+  cursor: none;
+}
+
+.cursor,
+.cursor-ring {
+  opacity: 0;
+  transition:
+    opacity 160ms ease,
+    width 220ms var(--motion-ease),
+    height 220ms var(--motion-ease),
+    border-color 220ms ease,
+    background-color 220ms ease;
+}
+
+.cursor.is-visible,
+.cursor-ring.is-visible {
+  opacity: 1;
+}
+
+.cursor-ring {
+  translate: -50% -50%;
+  transform: none;
+}
+
+.cursor.is-hover {
+  width: 10px;
+  height: 10px;
+}
+
+.cursor-ring.is-hover {
+  width: 58px;
+  height: 58px;
+}
+
+.land-map,
+.orbit-art,
+.block-art {
+  transition: filter 180ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-mesh,
+  .project-art,
+  .marquee-track {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .project-card:hover .land-map,
+  .project-card:hover .orbit-art,
+  .project-card:hover .block-art {
+    filter: none;
+  }
+}
+
+@media (max-width: 1000px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .ambient-spotlight {
+    display: none;
+  }
+}
+
+@media (max-width: 720px), (pointer: coarse) {
+  .project-card:hover .project-art {
+    transform: none;
+  }
+
+  .project-card:hover .land-map,
+  .project-card:hover .orbit-art,
+  .project-card:hover .block-art {
+    filter: none;
+  }
+}
 
 @media (max-width: 1000px) {
   .nav-links { gap: clamp(12px, 2vw, 20px); font-size: 9px; }
@@ -165,6 +272,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cursor,
+  .cursor-ring,
+  .ambient-spotlight {
+    display: none !important;
+  }
+
   *,
   *::before,
   *::after {

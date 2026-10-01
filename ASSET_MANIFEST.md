@@ -47,9 +47,23 @@ All first-party visual assets are procedural SVGs or CSS/canvas/Three.js graphic
 | `three-r128.min.js` | `assets/vendor/three-r128.min.js` | Minified JavaScript, Three.js r128 | Procedural interactive AI-core scene and particle systems | Loaded asynchronously by `index.html` on fine-pointer, wide layouts only | Minified production build; no model files |
 | `gsap-3.12.5.min.js` | `assets/vendor/gsap-3.12.5.min.js` | Minified JavaScript, GSAP 3.12.5 | Motion timelines and scroll animation | `index.html` local script | Minified production build |
 | `ScrollTrigger-3.12.5.min.js` | `assets/vendor/ScrollTrigger-3.12.5.min.js` | Minified JavaScript, ScrollTrigger 3.12.5 | Scroll-driven section and text choreography | `index.html` local script, registered with GSAP | Minified production build |
-| `lenis-1.1.20.min.js` | `assets/vendor/lenis-1.1.20.min.js` | Minified JavaScript, Lenis 1.1.20 | Previously used smooth-scroll integration; retained as a vendored asset | Not loaded by `index.html` | Minified production build; no runtime request |
+| `lenis-1.1.20.min.js` | `assets/vendor/lenis-1.1.20.min.js` | Minified JavaScript, Lenis 1.1.20 | Smooth desktop scrolling coordinated with GSAP and ScrollTrigger | Loaded on wide, fine-pointer layouts when reduced motion is off | Minified local asset; not requested on mobile or reduced-motion layouts |
+
+## Motion modules
+
+| Filename | Purpose | Runtime behavior |
+|---|---|---|
+| `scripts/smooth-scroll.js` | Initializes the locally vendored Lenis runtime and synchronizes it with GSAP/ScrollTrigger | Wide, fine-pointer layouts only; native scroll remains the fallback |
+| `scripts/custom-cursor.js` | Spring-smoothed dot and ring pointer treatment | Fine pointers only; disabled for reduced motion |
+| `scripts/spotlight.js` | Event-driven low-resolution ambient canvas spotlight | Fine pointers only; draws on pointer/resize events, never idles |
+| `scripts/project-cards.js` | Low-amplitude perspective tilt and pointer-following card highlight | Fine pointers only; reduced motion retains the highlight but not the tilt |
+| `scripts/animations.js` | Desktop hero-grid scroll parallax | ScrollTrigger scrub; disabled for reduced motion and smaller layouts |
+| `scripts/magnetic-links.js` | Spring-smoothed magnetic movement for links and buttons | Fine pointers only; disabled for reduced motion |
+| `scripts/scramble-headings.js` | Reveal/hover glyph scramble for work and contact headings | IntersectionObserver and pointer-enter driven; keeps the accessible heading label intact |
 
 Third-party runtime notices and applicable license links are recorded in [`assets/vendor/README.md`](assets/vendor/README.md).
+
+The independent Vite/React experience is located in `react-app/`. Its React, GSAP, ScrollTrigger, Lenis, Tailwind, Vite, and PostCSS dependencies and package lock are managed by `react-app/package.json` and `react-app/package-lock.json`; it does not change the root static site or its local vendor assets.
 
 ## Intentionally empty categories
 

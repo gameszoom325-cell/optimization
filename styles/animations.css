@@ -5,6 +5,11 @@
   will-change: auto;
 }
 
+.char-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+
 .text-target {
   --text-glow: rgba(var(--accent-rgb), .2);
 }

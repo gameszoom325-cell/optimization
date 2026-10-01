@@ -321,6 +321,7 @@
     @media (pointer: coarse) { .cursor { display: none; } }
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto !important; }
+      .hero-mesh { animation: none; }
       .status-dot,.marquee-track,.orbit-path,.loader-orbit::before,.loader-orbit::after,.scan-ring::before,.scan-ring::after,.journey-orbit::before,.journey-orbit::after,.map-contour,.cursor-blink {
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
@@ -337,13 +338,15 @@
     .cursor { width: 6px; height: 6px; background: var(--accent); box-shadow: 0 0 14px var(--accent); mix-blend-mode: screen; }
     .cursor-ring { position: fixed; z-index: 99; top: 0; left: 0; width: 36px; height: 36px; border: 1px solid rgba(157,235,255,.62); border-radius: 50%; pointer-events: none; transform: translate(-50%,-50%); transition: width .3s var(--ease),height .3s var(--ease),border-color .3s,background .3s; }
     .cursor-ring.is-hover { width: 66px; height: 66px; border-color: var(--accent); background: rgba(var(--accent-rgb),.08); }
-    .progress-line { height: 2px; background: linear-gradient(90deg,#36d7ff,#a879ff,#ff914e); box-shadow: 0 0 16px rgba(84,239,255,.65); }
+    .progress-line { height: 2px; background: linear-gradient(90deg,#f97316,#d946ef,#8b5cf6); box-shadow: 0 0 14px rgba(217,70,239,.3); }
     .nav-shell.scrolled { background: rgba(5,6,16,.76); border-color: rgba(176,214,255,.14); }
     .brand-mark { color: #060712; background: linear-gradient(135deg,#54efff,#a88aff); box-shadow: 0 0 20px rgba(84,239,255,.32); }
     .nav-links a:hover { color: var(--accent); }
     .status-dot,.eyebrow::before { background: var(--accent); box-shadow: 0 0 12px var(--accent); }
     .hero { min-height: max(850px,100svh); background: radial-gradient(ellipse at 73% 42%,rgba(52,90,205,.15),transparent 33%); }
     .hero::before { background: radial-gradient(ellipse at 69% 43%,rgba(71,63,198,.24),transparent 39%),radial-gradient(ellipse at 19% 82%,rgba(32,134,183,.12),transparent 37%),linear-gradient(180deg,#050610 0%,#080916 61%,#060711 100%); }
+    .hero-mesh { position: absolute; z-index: -1; inset: -14%; background: radial-gradient(ellipse at 72% 39%,rgba(249,115,22,.12),transparent 34%),radial-gradient(ellipse at 33% 67%,rgba(190,24,93,.13),transparent 39%),radial-gradient(ellipse at 53% 20%,rgba(108,63,190,.15),transparent 45%); opacity: .56; pointer-events: none; transform: translate3d(0,0,0) scale(1); animation: mesh-drift 24s ease-in-out infinite alternate; }
+    @keyframes mesh-drift { to { transform: translate3d(1.2%,-1%,0) scale(1.035); } }
     .hero-grid { opacity: .44; background-image: linear-gradient(rgba(144,180,255,.065) 1px,transparent 1px),linear-gradient(90deg,rgba(144,180,255,.065) 1px,transparent 1px); }
     .hero-title .acid { background: linear-gradient(100deg,#54efff 2%,#9284ff 56%,#54efff 100%); background-size: 200% auto; background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 27px rgba(84,239,255,.22)); animation: spectral 7s linear infinite; }
     @keyframes spectral { to { background-position: 200% center; } }
@@ -378,6 +381,9 @@
     .skill-fill { background: linear-gradient(90deg,#275cff,#58efff,#b393ff); box-shadow: 0 0 14px rgba(83,221,255,.55); }
     .project-card { border-color: color-mix(in srgb,var(--accent) 22%,transparent); background: linear-gradient(142deg,rgba(13,20,35,.95),rgba(8,11,21,.97)); }
     .project-card:hover { border-color: color-mix(in srgb,var(--accent) 72%,transparent); box-shadow: 0 30px 90px rgba(var(--accent-rgb),.13),inset 0 0 40px rgba(var(--accent-rgb),.035); }
+    .project-art { transform: translateZ(0); transition: transform .34s cubic-bezier(.2,.75,.25,1); }
+    .project-card:hover .project-art { transform: translate3d(0,-2px,14px) scale(1.025); }
+    .project-card:hover .land-map,.project-card:hover .orbit-art,.project-card:hover .block-art { filter: drop-shadow(2px 0 rgba(255,76,137,.18)) drop-shadow(-2px 0 rgba(73,211,255,.16)); }
     .project-card::after { background: radial-gradient(circle,rgba(var(--accent-rgb),.17),rgba(128,88,255,.08) 38%,transparent 70%); }
     .project-top .arrow-circle { color: var(--accent); }
     .project-card:hover .arrow-circle { border-color: var(--accent); background: rgba(var(--accent-rgb),.1); }
@@ -421,14 +427,13 @@
     .loader-fill { background: linear-gradient(90deg,#45dfff,#aa7aff); box-shadow: 0 0 12px #54efff; }
     @media (max-width: 720px) {
       .hero { min-height: max(790px,100svh); }
+      .hero-mesh { opacity: .32; animation: none; }
       .hero-caption-row > div { width: 100%; min-width: 0; }
       .hero-caption { max-width: 100%; }
       .hero-roles { max-width: 100%; }
       .hero-actions { max-width: 100%; flex-wrap: wrap; }
       .hero-actions .button { min-width: 0; max-width: 100%; }
-      .story-index { right: 10px; gap: 9px; }
-      .story-index a { font-size: 0; }
-      .cursor-ring { display: none; }
+      .story-index,.cursor-ring { display: none; }
     }
     @media (pointer: coarse) { .cursor-ring,.story-index { display: none; } }
     .scene-kicker { display: flex; align-items: center; gap: 12px; margin-bottom: 27px; color: #8b98ad; font: 9px var(--mono); letter-spacing: .16em; text-transform: uppercase; }
@@ -508,6 +513,7 @@
   <main id="top">
     <section class="hero" id="hero" data-world="hero" aria-labelledby="hero-title">
       <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-mesh" aria-hidden="true"></div>
       <canvas id="universe" aria-hidden="true"></canvas>
       <div class="hero-visual" aria-hidden="true">
         <div class="core-halo"></div><canvas id="core3d"></canvas>
@@ -669,6 +675,13 @@
   </footer>
   <script src="./assets/vendor/gsap-3.12.5.min.js"></script>
   <script src="./assets/vendor/ScrollTrigger-3.12.5.min.js"></script>
+  <script defer src="./scripts/smooth-scroll.js"></script>
+  <script defer src="./scripts/custom-cursor.js"></script>
+  <script defer src="./scripts/spotlight.js"></script>
+  <script defer src="./scripts/project-cards.js"></script>
+  <script defer src="./scripts/animations.js"></script>
+  <script defer src="./scripts/magnetic-links.js"></script>
+  <script defer src="./scripts/scramble-headings.js"></script>
   <script>
     (() => {
       "use strict";
@@ -737,7 +750,7 @@
         textNodes.forEach((textNode) => {
           const fragment = document.createDocumentFragment();
           const source = textNode.nodeValue || "";
-          const tokens = isCharacterText ? Array.from(source) : source.split(/(\s+)/);
+          const tokens = isCharacterText ? source.match(/\s+|[^\s]+/gu) || [] : source.split(/(\s+)/);
           tokens.forEach((token) => {
             if (!token) return;
             if (/^\s+$/.test(token)) {
@@ -748,8 +761,21 @@
               fragment.appendChild(whitespace);
               return;
             }
+            if (isCharacterText) {
+              const word = document.createElement("span");
+              word.className = "char-word";
+              Array.from(token).forEach((character) => {
+                const glyph = document.createElement("span");
+                glyph.className = "char-glyph";
+                glyph.style.setProperty("--glyph-index", String(glyphIndex++));
+                glyph.textContent = character;
+                word.appendChild(glyph);
+              });
+              fragment.appendChild(word);
+              return;
+            }
             const glyph = document.createElement("span");
-            glyph.className = isCharacterText ? "char-glyph" : "word-glyph";
+            glyph.className = "word-glyph";
             glyph.style.setProperty("--glyph-index", String(glyphIndex++));
             glyph.textContent = token;
             fragment.appendChild(glyph);
@@ -817,7 +843,8 @@
       const updateScroll = () => {
         scrollFrame = 0;
         const max = document.documentElement.scrollHeight - window.innerHeight;
-        scrollProgress.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+        const progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+        scrollProgress.style.transform = `scaleX(${progress})`;
         nav.classList.toggle("scrolled", window.scrollY > 24);
       };
       const scheduleScrollUpdate = () => {
@@ -883,7 +910,7 @@
         const toggleActions = "play none none none";
         const entranceDuration = reduceMotion ? .24 : isMobile ? .4 : .58;
         const entranceEase = reduceMotion ? "power1.out" : "power3.out";
-        const createViewportAnimation = ({ elements, from, to, start = "top 88%", end = "bottom 12%", duration = entranceDuration, stagger = 0, ease = entranceEase }) => {
+        const createViewportAnimation = ({ elements, from, to, start = "top 88%", end = "bottom 12%", duration = entranceDuration, stagger = 0, ease = entranceEase, clearProps = "" }) => {
           elements.forEach((element, index) => {
             gsap.fromTo(element, from(index, element), {
               ...to(index, element),
@@ -892,6 +919,7 @@
               stagger: reduceMotion ? Math.min(stagger, .004) : isMobile ? Math.min(stagger, .008) : stagger,
               ease,
               overwrite: "auto",
+              onComplete: clearProps ? () => gsap.set(element, { clearProps }) : undefined,
               scrollTrigger: {
                 trigger: element,
                 start,
@@ -930,11 +958,12 @@
         const textElements = gsap.utils.toArray(".animate-text");
         createViewportAnimation({
           elements: textElements,
-          from: () => ({ autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 7 : 12 }),
-          to: () => ({ autoAlpha: 1, y: 0 }),
+          from: () => ({ autoAlpha: 0, y: reduceMotion ? 1 : isMobile ? 7 : 12, scale: .995, filter: !reduceMotion && !isMobile ? "blur(3px)" : "blur(0px)" }),
+          to: () => ({ autoAlpha: 1, y: 0, scale: 1, filter: "blur(0px)" }),
           start: "top 91%",
           end: "bottom 10%",
-          stagger: .012
+          stagger: .012,
+          clearProps: "filter"
         });
 
         const headingElements = animatedHeadings.filter((heading) => heading.closest(".animate-text"));
@@ -1151,50 +1180,6 @@
         menuButton.focus();
       });
 
-      const cursor = document.querySelector(".cursor");
-      const cursorRing = document.querySelector(".cursor-ring");
-      if (window.matchMedia("(pointer: fine)").matches) {
-        window.addEventListener("pointermove", (event) => {
-          cursor.style.left = `${event.clientX}px`;
-          cursor.style.top = `${event.clientY}px`;
-          cursorRing.style.left = `${event.clientX}px`;
-          cursorRing.style.top = `${event.clientY}px`;
-        }, { passive: true });
-        document.querySelectorAll("a,button,.skill-module,.project-card").forEach((target) => {
-          target.addEventListener("pointerenter", () => {
-            cursor.classList.add("is-hover");
-            cursorRing.classList.add("is-hover");
-          });
-          target.addEventListener("pointerleave", () => {
-            cursor.classList.remove("is-hover");
-            cursorRing.classList.remove("is-hover");
-          });
-        });
-      }
-
-      if (!reduceMotion && window.matchMedia("(pointer: fine)").matches) {
-        document.querySelectorAll(".magnetic").forEach((element) => {
-          element.addEventListener("pointermove", (event) => {
-            const box = element.getBoundingClientRect();
-            const x = event.clientX - box.left - box.width / 2;
-            const y = event.clientY - box.top - box.height / 2;
-            element.style.transform = `translate(${x * .09}px,${y * .13}px)`;
-          });
-          element.addEventListener("pointerleave", () => element.style.transform = "");
-        });
-        document.querySelectorAll(".tilt-card").forEach((card) => {
-          card.addEventListener("pointermove", (event) => {
-            const box = card.getBoundingClientRect();
-            const x = (event.clientX - box.left) / box.width;
-            const y = (event.clientY - box.top) / box.height;
-            card.style.setProperty("--mx", `${x * 100}%`);
-            card.style.setProperty("--my", `${y * 100}%`);
-            card.style.transform = `perspective(1000px) rotateX(${(0.5 - y) * 2}deg) rotateY(${(x - 0.5) * 2}deg) translateY(-3px)`;
-          });
-          card.addEventListener("pointerleave", () => card.style.transform = "");
-        });
-      }
-
       const starCanvas = document.getElementById("universe");
       const starContext = starCanvas.getContext("2d", { alpha: true });
       let stars = [];
@@ -1217,7 +1202,9 @@
         stars = Array.from({ length: Math.min(mobileEffects ? 48 : 110, Math.floor(starWidth * starHeight / (mobileEffects ? 18000 : 11000))) }, () => ({
           x: Math.random() * starWidth, y: Math.random() * starHeight,
           size: Math.random() * 1.25 + .25, alpha: Math.random() * .52 + .12,
-          phase: Math.random() * Math.PI * 2, speed: Math.random() * .004 + .001
+          phase: Math.random() * Math.PI * 2, speed: Math.random() * .004 + .001,
+          driftX: (Math.random() - .5) * .035, driftY: (Math.random() - .5) * .025,
+          tint: ["255,177,116", "255,122,164", "179,154,255"][Math.floor(Math.random() * 3)]
         }));
         if (!animateStars) drawStars(0);
       };
@@ -1237,8 +1224,10 @@
           const alpha = star.alpha * (.68 + Math.sin(time * star.speed + star.phase) * .32);
           starContext.beginPath();
           starContext.arc(star.x + driftX, star.y + driftY, star.size, 0, Math.PI * 2);
-          starContext.fillStyle = `rgba(205,237,197,${alpha})`;
+          starContext.fillStyle = `rgba(${star.tint},${alpha})`;
           starContext.fill();
+          star.x = (star.x + star.driftX + starWidth) % starWidth;
+          star.y = (star.y + star.driftY + starHeight) % starHeight;
         });
         if (animateStars && heroInView && document.visibilityState === "visible") {
           starTimer = window.setTimeout(() => {

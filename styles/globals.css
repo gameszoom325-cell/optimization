@@ -31,7 +31,7 @@ button:focus-visible {
 }
 
 .text-space {
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 .sr-only-motion {
