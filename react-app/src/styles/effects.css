@@ -1,0 +1,93 @@
+.cursor-spotlight {
+  position: fixed;
+  z-index: 2;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--spotlight-x, 50vw) var(--spotlight-y, 30vh),
+    rgba(249, 115, 22, 0.12),
+    transparent 80%
+  );
+  opacity: var(--spotlight-alpha, 0);
+  pointer-events: none;
+  transition: opacity 180ms ease;
+}
+
+.react-cursor-dot,
+.react-cursor-ring {
+  position: fixed;
+  z-index: 110;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  will-change: transform;
+}
+
+.react-cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #ff9b58;
+  box-shadow: 0 0 14px rgba(249, 115, 22, 0.85);
+}
+
+.react-cursor-ring {
+  width: 35px;
+  height: 35px;
+  border: 1px solid rgba(247, 178, 205, 0.7);
+  transition: width 180ms ease, height 180ms ease, border-color 180ms ease, background-color 180ms ease, opacity 120ms ease;
+}
+
+.react-cursor-ring.is-hover {
+  width: 56px;
+  height: 56px;
+  border-color: #fb923c;
+  background: rgba(249, 115, 22, 0.075);
+}
+
+.react-cursor-dot.is-hover {
+  width: 8px;
+  height: 8px;
+}
+
+.has-custom-cursor,
+.has-custom-cursor a,
+.has-custom-cursor button,
+.has-custom-cursor [role="button"] {
+  cursor: none;
+}
+
+.ambient-particles {
+  contain: strict;
+}
+
+.project-card:focus-visible {
+  outline: 2px solid #fb923c;
+  outline-offset: 4px;
+}
+
+.project-card:hover .project-art {
+  filter: drop-shadow(2px 0 rgba(255, 93, 145, 0.19)) drop-shadow(-2px 0 rgba(107, 157, 255, 0.16));
+}
+
+@media (max-width: 900px), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .react-cursor-dot,
+  .react-cursor-ring,
+  .cursor-spotlight,
+  .ambient-particles {
+    display: none;
+  }
+
+  .has-custom-cursor,
+  .has-custom-cursor a,
+  .has-custom-cursor button,
+  .has-custom-cursor [role="button"] {
+    cursor: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover .project-art {
+    filter: none;
+  }
+}

@@ -1,0 +1,36 @@
+@keyframes ticker-slide {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes mesh-drift {
+  to {
+    transform: translate3d(1.4%, -1.2%, 0) scale(1.04);
+  }
+}
+
+@keyframes orbit-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scan-pass {
+  0%,
+  18% {
+    transform: translateY(0);
+  }
+
+  78%,
+  100% {
+    transform: translateY(380%);
+  }
+}
+
+@keyframes pulse-orbit {
+  50% {
+    opacity: 0.54;
+    scale: 1.035;
+  }
+}
