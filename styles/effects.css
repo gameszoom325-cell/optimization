@@ -160,21 +160,6 @@
 
 @media (max-width: 720px), (pointer: coarse) {
   #matrix-rain { display: none; }
-
-  .hero-visual::before,
-  .core-halo,
-  .map-contour,
-  .journey-orbit::before,
-  .journey-orbit::after,
-  .status-dot,
-  .marquee-track,
-  .scroll-cue i,
-  .scan-ring::before,
-  .scan-ring::after,
-  .scan-core,
-  .orbit-path,
-  .map-pin { animation: none; }
-
   .hero-visual { opacity: .28; }
   .noise { display: none; }
 }
